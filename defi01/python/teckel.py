@@ -97,3 +97,25 @@ def qs_3(a: List[int], l: int, h: int) -> None:
 def teckel_3(a: List[int], n: int) -> List[int]:
     qs_3(a, 0, n - 1)
     return a
+
+
+def partition_4(arr: List[int], pivot: int) -> Tuple[List[int], List[int], List[int]]:
+    l, m, h = [], [], []
+    for x in arr:
+        if x < pivot: 
+            l.append(x)
+        if x == pivot: 
+            m.append(x)
+        if x > pivot: 
+            h.append(x)
+    return l, m, h
+
+@register
+def teckel_4(arr: List[int], n: int) -> List[int]:
+    if len(arr) <= 1: 
+        return arr
+    
+    pivot = arr[len(arr)//2]
+
+    l, m, h = partition_4(arr, pivot)
+    return teckel_4(l, len(arr)) + m + teckel_4(h, len(arr))
