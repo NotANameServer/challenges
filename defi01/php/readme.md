@@ -8,7 +8,7 @@ Il y a eu un total de 2 participants:
 
 ## Résultats pour Hesode#0487:
 | Test                       | Temps (ms) |
-|:--------------------------:|:----------:|
+|:-------------------------- |:----------:|
 | testEmptyArray             | 0          |
 | testDefaultArray           | 0          |
 | testOrderedIntArray2Pow10  | 9          |
