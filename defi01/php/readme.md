@@ -3,8 +3,7 @@
 Il y a eu un total de 2 participants:
 
 * [`Hesode#0487 (@391358353839882253)`](./Hesode)
-
-
+* [`Superkooka#0612 (@283933553975230464)`](./superkooka)
 
 ## Résultats pour Hesode#0487:
 | Test                       | Temps (ms) |
@@ -34,9 +33,6 @@ Quantitée maximale de RAM utilisée: 158 Mio
 **Commentaire**:
 Code très propre, correctement indenté et cohérent dans l'ensemble. La partie tests unitaires est apréciable.
 Il manque juste quelques commentaires dans la classe IntTreeSort, et l'utilisation d'un while(true) qui est bofbof.
-
-
-* [`Superkooka#0612 (@283933553975230464)`](./SuperKooka)
 
 ## Résultats pour Superkooka#0612:
 
