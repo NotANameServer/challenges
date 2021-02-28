@@ -1,131 +1,139 @@
+const WALL = '#'
+const EMPTY = ' '
+const START = '.'
+
 class Maze {
-  constructor(width, height) {
-      this.width = width
-      this.height = height
-      this.grid = Array.from({ length: height }, () => Array.from({ length: width }, () => '#'))
-      this.start = this.randomStart()
-      this.end = this.opposite(this.start)
-      this.previousPositions = []
-      this.previousStuckPositions = []
-      this.genPath()
-  }
+    constructor(width, height) {
+        this.width = width
+        this.height = height
+        this.grid = Array.from({ length: height }, () => Array(width).fill(WALL))
+        this.end = this.randomEnd()
+        this.previousPositions = []
+        this.previousStuckPositions = []
+        this.genPath()
+    }
 
-  randomStart() {
-      const x = Math.floor(Math.random() * this.width)
-      const y = Math.floor(Math.random() * this.height)
-      if (!this.isWall({ x, y }) || this.isCorner({ x, y })) {
-          return this.randomStart()
-      }
-      return { x, y }
-  }
+    randomEnd() {
+        const x = Math.floor(Math.random() * this.width)
+        const y = Math.floor(Math.random() * this.height)
+        if (!this.isBorder({ x, y }) || this.isCorner({ x, y })) {
+            return this.randomEnd()
+        }
+        return { x, y }
+    }
 
-  isWall({ x, y }) {
-      return y === 0 ||
-          x === 0 ||
-          y === this.height - 1 ||
-          x === this.width - 1 ?
-          true :
-          false
-  }
+    isBorder({ x, y }) {
+        return y === 0 ||
+            x === 0 ||
+            y === this.height - 1 ||
+            x === this.width - 1 ?
+            true :
+            false
+    }
 
-  isCorner({ x, y }) {
-      return x === 0 && y === 0 ||
-          x === 0 && y === this.height - 1 ||
-          x === this.width - 1 && y === 0 ||
-          x === this.width - 1 && y === this.height - 1
-  }
+    isCorner({ x, y }) {
+        return x === 0 && y === 0 ||
+            x === 0 && y === this.height - 1 ||
+            x === this.width - 1 && y === 0 ||
+            x === this.width - 1 && y === this.height - 1
+    }
 
-  opposite({ x, y }) {
-      return { x: this.width - 1 - x, y: this.height - 1 - y}
-  }
+    genPath() {
+        let { x, y } = this.end
+        this.grid[y][x] = EMPTY
 
-  genPath() {
-      // Maze end
-      this.grid[this.end.y][this.end.x] = ' '
+        if (x === 0) x += 1
+        else if (y === 0) y += 1
+        else if (x === this.width - 1) x -= 1
+        else if (y === this.height - 1) y -= 1
 
-      let { x, y } = this.start
+        this.grid[y][x] = EMPTY
 
-      if (x === 0) x += 1
-      else if (y === 0) y += 1
-      else if (x === this.width - 1) x -= 1
-      else if (y === this.height - 1) y -= 1
+        this.position = { x, y }
+        this.nextPosition()
+    }
 
-      // Maze start
-      this.grid[y][x] = '.'
+    nextPosition() {
+        if (!this.position) {
+            this.addStartPoint()
+            return
+        }
+        let { x, y } = this.position
 
-      this.position = { x, y }
-      this.nextPosition()
-  }
+        const sideCells = this.sideCells({ x, y })
+        const availablePositions = this.availablePositions(sideCells)
+        if (availablePositions.length === 0) {
+            this.previousStuckPositions.push({ x, y })
+            this.position = this.previousPositions.pop()
+            return this.nextPosition()
+        }
+        this.previousPositions.push({ x, y })
+        this.position = this.randomPosition(availablePositions)
+        this.grid[this.position.y][this.position.x] = EMPTY
+        this.nextPosition()
+    }
 
-  nextPosition() {
-      if (!this.position) {
-          this.checkEndCanBeReached()
-          this.render()
-          return
-      }
-      let { x, y } = this.position
+    sideCells({ x, y }) {
+        const left = { x: x - 1, y: y }
+        const up = { x: x, y: y - 1 }
+        const right = { x: x + 1, y: y }
+        const down = { x: x, y: y + 1 }
 
-      const sideCells = this.sideCells({ x, y })
-      const availablePositions = this.availablePositions(sideCells)
-      if (availablePositions.length === 0) {
-          this.previousStuckPositions.push({ x, y })
-          this.position = this.previousPositions.pop()
-          return this.nextPosition()
-      }
-      this.previousPositions.push({ x, y })
-      this.position = this.randomPosition(availablePositions)
-      this.grid[this.position.y][this.position.x] = ' '
-      this.nextPosition()
-  }
+        return [left, up, right, down]
+    }
 
-  sideCells({ x, y }) {
-      const left = { x: x - 1, y: y }
-      const up = { x: x, y: y - 1 }
-      const right = { x: x + 1, y: y }
-      const down = { x: x, y: y + 1 }
+    availablePositions(positions) {
+        const availablePositions = positions.filter(pos => {
+            return !this.isSameAsPreviousPosition(pos) && !this.isBorder(pos)
+        })
+        return availablePositions.filter(position => {
+            return this.sideCells(position)
+                .filter(pos => pos.x !== this.position.x || pos.y !== this.position.y)
+                .every(pos => !this.isSameAsPreviousPosition(pos))
+        })
+    }
 
-      return [left, up, right, down]
-  }
+    isSameAsPreviousPosition({ x, y }) {
+        return this.previousPositions.some(pos => x === pos.x && y === pos.y) ||
+        this.previousStuckPositions.some(pos => x === pos.x && y === pos.y)
+    }
 
-  availablePositions(positions) {
-      const availablePositions = positions.filter(pos => {
-          return !this.isSameAsPreviousPosition(pos) && !this.isWall(pos)
-      })
-      return availablePositions.filter(position => {
-          return this.sideCells(position)
-              .filter(pos => pos.x !== this.position.x || pos.y !== this.position.y)
-              .every(pos => !this.isSameAsPreviousPosition(pos))
-      })
-  }
+    randomPosition(positions) {
+        const randomIndex = Math.floor(Math.random() * positions.length)
+        return positions[randomIndex]
+    }
 
-  isSameAsPreviousPosition({ x, y }) {
-      return this.previousPositions.some(pos => x === pos.x && y === pos.y) ||
-      this.previousStuckPositions.some(pos => x === pos.x && y === pos.y)
-  }
+    addStartPoint() {
+        let axe = 'horizontal'
+        let { x, y } = this.opposite(this.end)
 
-  randomPosition(positions) {
-      const randomIndex = Math.floor(Math.random() * positions.length)
-      return positions[randomIndex]
-  }
+        if (x === 0) x += 1, axe = 'vertical'
+        else if (y === 0) y += 1
+        else if (x === this.width - 1) x -= 1, axe = 'vertical'
+        else if (y === this.height - 1) y -= 1
 
-  // Check if end is blocked, remove wall if needed
-  // Won't work in every case
-  checkEndCanBeReached() {
-      let { x, y } = this.end
+        while(!this.isAvailable({ x, y })) {
+            if (axe === 'horizontal') {
+                x = x >= this.width / 2 ? x - 1 : x + 1
+            } else {
+                y = y >= this.height / 2 ? y - 1 : y + 1
+            }
+        }
+        this.grid[y][x] = START
+    }
 
-      if (x === 0) x += 1
-      else if (y === 0) y += 1
-      else if (x === this.width - 1) x -= 1
-      else if (y === this.height - 1) y -= 1
+    opposite({ x, y }) {
+        return { x: this.width - 1 - x, y: this.height - 1 - y}
+    }
 
-      if (this.grid[y][x] === '#') {
-          this.grid[y][x] = ' '
-      }
-  }
+    isAvailable({ x, y }) {
+        return this.grid[y][x] === EMPTY
+    }
 
-  render() {
-      console.log(this.grid.map(row => `${row.join('')}\n`).join(''))
-  }
+    render() {
+        return this.grid.map(row => `${row.join('')}\n`).join('')
+    }
 }
 
 const maze = new Maze(30, 8)
+console.log(maze.render())
