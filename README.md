@@ -44,4 +44,4 @@ votre candidature pour devenir ambassadeur et rejoindre l'aventure !
 | lua | *personne* |
 | php | Mjöllnir#3515 et Cara#0385 |
 | python | Dr Lazor#6737 |
-| rust | *personne* |
+| rust | Wafelack#6513 |
