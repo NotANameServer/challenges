@@ -2,4 +2,4 @@
 
 Il y a eu un total d'1 participant :
 
-* [`Syrows#6297`](./Syrows)
+* [`Syrows#6297`](https://gitlab.com/Syr0ws/mazegenerator)
