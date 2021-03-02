@@ -179,4 +179,5 @@ class Maze {
 
 }
 
-console.log(new Maze(21, 11).toString());
+const [width, height] = process.argv.slice(2);
+console.log(new Maze(parseInt(width, 10) || 21, parseInt(height, 10) || 11).toString());

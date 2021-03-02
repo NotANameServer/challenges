@@ -4,3 +4,6 @@
 [submodule "defi02/python/Jean"]
 	path = defi02/python/Jean
 	url = git@gist.github.com:2502a28f3d826a5533984d41eed62fd9.git
+[submodule "defi02/java/Syrows"]
+	path = defi02/java/Syrows
+	url = https://gitlab.com/Syr0ws/mazegenerator.git

@@ -135,5 +135,6 @@ class Maze {
     }
 }
 
-const maze = new Maze(30, 8)
+const [width, height] = process.argv.slice(2)
+const maze = new Maze(parseInt(width, 10) || 30, parseInt(height, 10) || 8)
 console.log(maze.render())
