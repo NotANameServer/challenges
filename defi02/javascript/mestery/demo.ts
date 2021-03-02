@@ -1,5 +1,4 @@
-import { Maze } from ".";
-import { CellType } from "./maze";
+import { Maze, CellType } from ".";
 
 const [width, height] = process.argv.slice(2);
 const myMaze = new Maze(parseInt(width, 10) || 21, parseInt(height, 10) || 11);
