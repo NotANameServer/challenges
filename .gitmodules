@@ -1,0 +1,6 @@
+[submodule "defi02/python/LeMinaw"]
+	path = defi02/python/LeMinaw
+	url = git@github.com:LeMinaw/MinotaurAutomata.git
+[submodule "defi02/python/Jean"]
+	path = defi02/python/Jean
+	url = git@gist.github.com:2502a28f3d826a5533984d41eed62fd9.git
