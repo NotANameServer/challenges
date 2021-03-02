@@ -1,7 +1,7 @@
-import { CellType, Cell } from "./maze";
+import { CellType } from "./maze";
 
 export interface RendererConstructor {
-  new(grid: CellType[][]): Renderer
+  new (grid: CellType[][]): Renderer;
 };
 
 export interface Renderer {
@@ -27,7 +27,7 @@ export class TextRenderer extends Renderer {
 
   public render({ separator = '', customCharMap = {} }: TextRendererOptions = {}): string {
     const charMap = { ...TextRenderer.CHAR_MAP, ...customCharMap };
-    return this.grid.map((row) => row.map((cell) => charMap[cell]).join(separator ?? '')).join('\n');
+    return this.grid.map((row) => row.map((cell) => charMap[cell]).join(separator)).join('\n');
   }
 
   public toString(options?: TextRendererOptions): string {
