@@ -42,10 +42,10 @@ export class Maze<R extends Renderer = TextRenderer> {
   public readonly width: number;
 
   public constructor(width: number, height: number, renderer: RendererConstructor = TextRenderer) {
-    if (this.width < 5 || this.height < 5) {
+    if (width < 5 || height < 5) {
       throw new RangeError('width and height must be >= 5.');
     }
-    if (this.width % 2 === 0 || this.height % 2 === 0) {
+    if (width % 2 === 0 || height % 2 === 0) {
       throw new Error('width and height must be odd.');
     }
     this.width = width;
