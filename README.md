@@ -45,3 +45,10 @@ votre candidature pour devenir ambassadeur et rejoindre l'aventure !
 | php | Mjöllnir#3515 et Cara#0385 |
 | python | Dr Lazor#6737 |
 | rust | Wafelack#6513 |
+
+## La liste des défis
+
+1. [Algorithme de tri](defi01)
+2. [Génération de Labyrinthe](defi02)
+3. [Résolution de Labyrinthe](defi03)
+4. [Implémentation d'un serveur HTTP](defi04)
