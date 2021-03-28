@@ -4,7 +4,7 @@ import { Server, decodeBody } from 'not-an-httpserver';
 const counters = new Map<string, number>([['carotte', 10]]);
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const server = new Server((request, response) => {
-	if (request.rawHeaders.get('host') !== 'compteur.notaname.fr:8080') {
+	if (request.rawHeaders.host !== 'compteur.notaname.fr:8080') {
 		response.writeHead(400);
 		response.end();
 		return;
@@ -50,7 +50,7 @@ const server = new Server((request, response) => {
 		if (body) {
 			try {
 				names =
-					request.rawHeaders.get('content-type') === 'application/x-www-form-urlencoded'
+					request.rawHeaders['content-type'] === 'application/x-www-form-urlencoded'
 						? parse(body).name
 						: JSON.parse(body)?.name;
 				// eslint-disable-next-line no-empty
@@ -104,7 +104,7 @@ const server = new Server((request, response) => {
 
 		try {
 			newValue =
-				request.rawHeaders.get('content-type') === 'application/x-www-form-urlencoded'
+				request.rawHeaders['content-type'] === 'application/x-www-form-urlencoded'
 					? parse(body).value
 					: JSON.parse(body)?.value;
 

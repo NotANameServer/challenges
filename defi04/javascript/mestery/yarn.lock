@@ -2076,7 +2076,7 @@ __metadata:
     eslint-plugin-simple-import-sort: ^7.0.0
     eslint-plugin-sonarjs: ^0.6.0
     eslint-plugin-unicorn: ^29.0.0
-    not-an-httpserver: "https://github.com/Mesteery/not-an-httpserver#main"
+    not-an-httpserver: "https://github.com/Mesteery/not-an-httpserver.git#commit=07d8227a60ada46150de4411f0aa2e90551186e4"
     prettier: ^2.2.1
     rimraf: ^3.0.2
     typescript: ^4.2.3
@@ -2086,10 +2086,10 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"not-an-httpserver@https://github.com/Mesteery/not-an-httpserver#main":
+"not-an-httpserver@https://github.com/Mesteery/not-an-httpserver.git#commit=07d8227a60ada46150de4411f0aa2e90551186e4":
   version: 0.0.0
-  resolution: "not-an-httpserver@https://github.com/Mesteery/not-an-httpserver.git#commit=76e37afd0b473a092cdb82bac371c92df1bb4202"
-  checksum: 99fce470a821ba2cee52b5664640d44ef05d4f3dc2c496f866f0590cacc9b4cbc8423fdbe3b5deb19ddfeb437950819ac70919588c5c827b4093813cf654fc48
+  resolution: "not-an-httpserver@https://github.com/Mesteery/not-an-httpserver.git#commit=07d8227a60ada46150de4411f0aa2e90551186e4"
+  checksum: 939fd130d4553371401caa994c5043f005ab8b94e24ef54708203d7ec91117095e31be5e6b4f6dd69ceb01bc7504897dd7efe8cf31d95fafd70d4794382ab8be
   languageName: node
   linkType: hard
 
