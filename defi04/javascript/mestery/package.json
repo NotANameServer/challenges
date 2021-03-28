@@ -1,0 +1,42 @@
+{
+	"name": "not-a-counter",
+	"private": true,
+	"main": "build/index.js",
+	"prettier": "@typescord/prettier-config",
+	"scripts": {
+		"start": "yarn node .",
+		"build": "rimraf build && tsc -p tsconfig.json",
+		"lint": "eslint . --ext ts",
+		"lint-fix": "yarn lint --fix",
+		"format": "prettier . --write",
+		"autcannon": "autocannon"
+	},
+	"author": "mestery",
+	"devDependencies": {
+		"@types/node": "^14.14.37",
+		"@typescord/eslint-config": "^0.2.0",
+		"@typescord/prettier-config": "^0.1.2",
+		"@typescript-eslint/eslint-plugin": "^4.19.0",
+		"@typescript-eslint/parser": "^4.19.0",
+		"autocannon": "^7.0.5",
+		"eslint": "^7.23.0",
+		"eslint-config-prettier": "^7.2.0",
+		"eslint-import-resolver-node": "^0.3.4",
+		"eslint-plugin-import": "^2.22.1",
+		"eslint-plugin-prettier": "^3.3.1",
+		"eslint-plugin-simple-import-sort": "^7.0.0",
+		"eslint-plugin-sonarjs": "^0.6.0",
+		"eslint-plugin-unicorn": "^29.0.0",
+		"prettier": "^2.2.1",
+		"rimraf": "^3.0.2",
+		"typescript": "^4.2.3"
+	},
+	"dependencies": {
+		"not-an-httpserver": "https://github.com/Mesteery/not-an-httpserver#main"
+	},
+	"dependenciesMeta": {
+		"autocannon@7.0.5": {
+			"unplugged": true
+		}
+	}
+}
