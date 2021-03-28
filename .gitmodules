@@ -7,3 +7,6 @@
 [submodule "defi02/java/Syrows"]
 	path = defi02/java/Syrows
 	url = https://gitlab.com/Syr0ws/mazegenerator.git
+[submodule "defi04/java/httpServer"]
+	path = defi04/java/httpServer
+	url = https://github.com/florentm35/httpServer
