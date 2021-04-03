@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
@@ -86,7 +86,7 @@ Access-Control-Allow-Origin: *
 			string data = System.Text.Encoding.ASCII.GetString(bytes, 0, size);
 			Console.WriteLine("Received: {0}", data);
 
-			string date = DateTime.Now.ToString("r");
+			var request = new HttpRequest(data);
 
 			data = CreateHttpPayload(HttpStatusCode.OK, "text/html", "<P>Ceci est une page d'exemple.</P>");
 			Console.WriteLine("Sent: {0}", data);
