@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
@@ -62,33 +62,17 @@ namespace Elanis.Webserver {
 			}
 		}
 
-		private static string CreateHttpPayload(HttpStatusCode statusCode, string type, string content) {
-			string statusText = (int)statusCode + " " + statusCode.ToString();
-
-			string date = DateTime.Now.ToString("r");
-
-			return string.Format(
-@"HTTP/1.0 {0}
-Date: {1}
-Server: Apache... Nan jdeconne, Elanis Web Server/1.0.0
-Content-Type: {2}
-Content-Length: {3}
-Expires: {1}
-Last-modified: {1}
-Access-Control-Allow-Origin: *
-
-{4}"
-				, statusText, date, type, content.Length, content
-			);
-		}
-
 		private static byte[] YaGotHttpPayloadToWorkOn(byte[] bytes, int size) {
 			string data = System.Text.Encoding.ASCII.GetString(bytes, 0, size);
 			Console.WriteLine("Received: {0}", data);
 
 			var request = new HttpRequest(data);
 
-			data = CreateHttpPayload(HttpStatusCode.OK, "text/html", "<P>Ceci est une page d'exemple.</P>");
+			// TODO: understand request and do work
+
+			var response = new HttpResponse(HttpStatusCode.OK, "<P>Ceci est une page d'exemple.</P>", "text/html");
+
+			data = response.ToString();
 			Console.WriteLine("Sent: {0}", data);
 
 			byte[] msg = System.Text.Encoding.ASCII.GetBytes(data);
