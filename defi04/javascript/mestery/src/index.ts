@@ -14,6 +14,9 @@ const server = new Server((request, response) => {
 	const body = request.body ? (decodeBody(request.body, 'utf8') as string) : undefined;
 
 	if (request.method === 'GET' && request.url.pathname === '/') {
+		for (let i = 0; i < 2e8; i++) {} // 200 ms
+		await new Promise((resolve) => setTimeout(resolve, 300)); // 300 ms
+
 		response.headers['Content-Type'] = 'application/json';
 		response.end(
 			JSON.stringify({
