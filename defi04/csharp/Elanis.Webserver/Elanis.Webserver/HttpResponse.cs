@@ -23,15 +23,15 @@ namespace Elanis.Webserver {
 			return string.Format(
 @"HTTP/1.0 {0}
 Date: {1}
-Server: Apache... Nan jdeconne, Elanis Web Server/1.0.0
-Content-Type: {2}
-Content-Length: {3}
+Server: {2}
+Content-Type: {3}
+Content-Length: {4}
 Expires: {1}
 Last-modified: {1}
 Access-Control-Allow-Origin: *
 
-{4}"
-	, statusText, date.ToString("r"), contentType, content.Length, content
+{5}"
+	, statusText, date.ToString("r"), SERVER_NAME, contentType, content.Length, content
 );
 		}
 	}
