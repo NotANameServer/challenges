@@ -3,7 +3,7 @@ import { Server, decodeBody } from 'not-an-httpserver';
 
 const counters = new Map<string, number>([['carotte', 10]]);
 // eslint-disable-next-line sonarjs/cognitive-complexity
-const server = new Server((request, response) => {
+const server = new Server(async (request, response) => {
 	if (request.rawHeaders.host !== 'compteur.notaname.fr:8080') {
 		response.writeHead(400);
 		response.end();
