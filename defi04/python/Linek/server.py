@@ -68,20 +68,20 @@ class Request:
         self.ip = ip
         self.raw = datas
         self.headers = dict(headers or {})
-        accepts, *_ = self.headers.get("Accept", "").split(";")
-        self.accepts = accepts.split(",")
+        self.accepts = self._parse_accept(self.headers.get("Accept", ""))
         self.hostname, *_ = self.headers.get("Host", "").split(":")
 
         if command:
-            self.method, route, self.version = command.decode().split()
+            self.method, route, self.version = command.decode("ascii").split()
         else:
             self.method = route = self.version = ""
         self.route, self.params = self._parse_route(route)
-        content_type = self.headers.get("Content-Type", "")
+        content_type, _, charset = self.headers.get("Content-Type", "").partition(";")
+        key, _, value = charset.partition("=")
         if content_type == "text/x-www-form-urlencoded":
-            self.data = self._parse_url_encoded(self.raw.decode())
-        elif content_type.startswith("application/json"):
-            self.data = json.loads(self.raw.decode())
+            self.data = self._parse_url_encoded(self.raw.decode(value or "utf-8"))
+        elif content_type == "application/json":
+            self.data = json.loads(self.raw.decode(value or "utf-8"))
         else:
             self.data = {}
 
@@ -218,7 +218,7 @@ class HTTPServer:
             while b"\r\n\r\n" not in datas and (chunk := client.recv(2048)):
                 datas.extend(chunk)
             headers, rn, datas = datas.partition(b"\r\n\r\n")
-            headers = self._parse_headers(headers.decode())
+            headers = self._parse_headers(headers.decode("ascii"))
             length = int(headers.get("Content-Length", 0))
             while len(datas) < length and (chunk := client.recv(2048)):
                 datas.extend(chunk)
