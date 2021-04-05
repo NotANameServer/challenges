@@ -31,36 +31,6 @@ def make_html(title, body):
     )
 
 
-def render_html(datas):
-    """ un convertisseur json to html pas du tout testé """
-    if isinstance(datas, list):
-        res = ""
-        for data in datas:
-            res += f"<div>{render_html(data)}</div>\n"
-        return res
-    if isinstance(datas, dict):
-        res = "<div>"
-        for key, data in datas.items():
-            res += f"<strong>{key}:</strong> {render_html(data)}, "
-        return res.rstrip(", ") + "</div>\n"
-    return f"{datas}"
-
-
-def render_text(datas):
-    """ pareil en json to text """
-    if isinstance(datas, list):
-        res = ""
-        for data in datas:
-            res += render_text(data) + "\n"
-        return res
-    if isinstance(datas, dict):
-        res = ""
-        for key, data in datas.items():
-            res += f"{key}: {render_text(data)}, "
-        return res.rstrip(", ")
-    return f"{datas}"
-
-
 class Request:
     """ web request """
 
@@ -85,6 +55,14 @@ class Request:
         else:
             self.data = {}
 
+    def _parse_accept(self, accept):
+        res = []
+        for leaf in accept.split(","):
+            a, *_ = leaf.split(";")
+            res.append(a.strip())
+
+        return res
+
     def _parse_url_encoded(self, datas):
         res = {}
         if datas:
@@ -101,55 +79,23 @@ class Request:
         return {
             "Server": "Linek/0.0.0",
             "Date": datetime.utcnow().strftime("%a %d %b %Y %H:%M:%S GMT"),
-            "Connection": "keep-alive",
         }
 
     def make_response(
         self,
         code=200,
-        content_type=None,
         headers=None,
         datas=None,
-        render=True,
-        title="Schtroumpfed !",
     ):
-        """cette fonction fait trop de trucs :thinking:
-        le param render ne sert que si datas est truthy
-        le param title ne sert que si on renvoie de l'html
-        """
-        heads = self._default_headers()
-        heads.update(headers or {})
+        """ construit la réponse HTTP """
+        response_headers = self._default_headers()
+        response_headers.update(headers or {})
 
         if datas:
-
-            if not content_type:
-                for accept in self.accepts:
-                    if accept in ("application/json", "text/html", "text/plain"):
-                        content_type = accept
-                        break
-                else:
-                    content_type = "text/plain"
-            heads["Content-Type"] = content_type
-
-            if render and isinstance(datas, (list, dict, int, float, bool)):
-                if content_type == ("application/json"):
-                    datas = json.dumps(datas).encode()
-                elif content_type == ("text/html"):
-                    datas = render_html(datas)
-                else:
-                    datas = render_text(datas)
-
-            if content_type == "text/html":
-                datas = make_html(title, datas)
-
-            if isinstance(datas, str):
-                datas = datas.encode()
-            elif not isinstance(datas, bytes):
-                datas = str(datas).encode()
-            heads["Content-Length"] = len(datas)
+            response_headers["Content-Length"] = len(datas)
         response = f"HTTP/1.0 {code} {HTTP_CODES[code]}\r\n"
-        if heads:
-            for key, val in heads.items():
+        if response_headers:
+            for key, val in response_headers.items():
                 response += f"{key}: {val}\r\n"
         response += "\r\n"
         response = response.encode()
@@ -161,11 +107,9 @@ class Request:
         return response
 
     def not_found(self):
-        return self.make_response(
-            404,
-            content_type="text/html",
-            title="404 Not Schtroumpf",
-            datas="""\
+        html = make_html(
+            "404 Not Schtroumpf",
+            """\
 <body>
     <h1>Not Schtroumpf</h1>
     <p>
@@ -173,7 +117,11 @@ class Request:
         please schtroumpf your spelling and schtroumpf again.
     </p>
 </body>""",
-            render=False,
+        )
+        return self.make_response(
+            404,
+            headers={"Content-Type": "text/html;charset=utf-8"},
+            datas=html.encode(),
         )
 
 
@@ -191,7 +139,7 @@ class HTTPServer:
         self.semaphore = threading.Semaphore(max_threads)
 
     def run(self):
-        self.server.listen(100)
+        self.server.listen(5)
         print(f"server running on {self.hostname}:{self.port}")
         while True:
             client, client_info = self.server.accept()
