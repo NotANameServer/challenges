@@ -182,12 +182,13 @@ class HTTPServer:
     ou pas
     """
 
-    def __init__(self, hostname, port=8080):
+    def __init__(self, hostname, port=8080, max_threads=4):
         self.hostname = hostname
         self.port = port
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.server.bind((hostname, port))
+        self.semaphore = threading.Semaphore(max_threads)
 
     def run(self):
         self.server.listen(100)
@@ -208,8 +209,9 @@ class HTTPServer:
         return res
 
     def _handle_request(self, client, client_info):
+        self.semaphore.acquire()
+        datas = bytearray()
         try:
-            datas = bytearray()
             datas.extend(client.recv(2048))
             command, rn, datas = datas.partition(b"\r\n")
             if not rn:
@@ -234,6 +236,7 @@ class HTTPServer:
             client.send(request.make_response(500))
         finally:
             client.close()
+            self.semaphore.release()
 
     def _get_response(self, request):
         """flemme de faire un routing map alors...
