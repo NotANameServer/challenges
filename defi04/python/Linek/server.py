@@ -2,6 +2,7 @@ from datetime import datetime
 import json
 import socket
 import threading
+from concurrent.futures import ThreadPoolExecutor
 
 HTTP_CODES = {
     200: "OK",
@@ -136,17 +137,15 @@ class HTTPServer:
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.server.bind((hostname, port))
-        self.semaphore = threading.Semaphore(max_threads)
+        self.max_threads = max_threads
 
     def run(self):
         self.server.listen(5)
         print(f"server running on {self.hostname}:{self.port}")
-        while True:
-            client, client_info = self.server.accept()
-            t = threading.Thread(
-                target=self._handle_request, args=(client, client_info)
-            )
-            t.start()
+        with ThreadPoolExecutor(max_workers=self.max_threads) as pool:
+            while True:
+                client, client_info = self.server.accept()
+                pool.submit(self._handle_request, client, client_info)
 
     def _parse_headers(self, datas):
         res = {}
@@ -157,7 +156,6 @@ class HTTPServer:
         return res
 
     def _handle_request(self, client, client_info):
-        self.semaphore.acquire()
         datas = bytearray()
         try:
             datas.extend(client.recv(2048))
@@ -184,7 +182,6 @@ class HTTPServer:
             client.send(request.make_response(500))
         finally:
             client.close()
-            self.semaphore.release()
 
     def _get_response(self, request):
         """flemme de faire un routing map alors...
