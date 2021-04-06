@@ -2,6 +2,7 @@ from datetime import datetime
 import json
 import socket
 import threading
+from concurrent.futures import ThreadPoolExecutor
 
 HTTP_CODES = {
     200: "OK",
@@ -31,36 +32,6 @@ def make_html(title, body):
     )
 
 
-def render_html(datas):
-    """ un convertisseur json to html pas du tout testé """
-    if isinstance(datas, list):
-        res = ""
-        for data in datas:
-            res += f"<div>{render_html(data)}</div>\n"
-        return res
-    if isinstance(datas, dict):
-        res = "<div>"
-        for key, data in datas.items():
-            res += f"<strong>{key}:</strong> {render_html(data)}, "
-        return res.rstrip(", ") + "</div>\n"
-    return f"{datas}"
-
-
-def render_text(datas):
-    """ pareil en json to text """
-    if isinstance(datas, list):
-        res = ""
-        for data in datas:
-            res += render_text(data) + "\n"
-        return res
-    if isinstance(datas, dict):
-        res = ""
-        for key, data in datas.items():
-            res += f"{key}: {render_text(data)}, "
-        return res.rstrip(", ")
-    return f"{datas}"
-
-
 class Request:
     """ web request """
 
@@ -68,22 +39,30 @@ class Request:
         self.ip = ip
         self.raw = datas
         self.headers = dict(headers or {})
-        accepts, *_ = self.headers.get("Accept", "").split(";")
-        self.accepts = accepts.split(",")
+        self.accepts = self._parse_accept(self.headers.get("Accept", ""))
         self.hostname, *_ = self.headers.get("Host", "").split(":")
 
         if command:
-            self.method, route, self.version = command.decode().split()
+            self.method, route, self.version = command.decode("ascii").split()
         else:
             self.method = route = self.version = ""
         self.route, self.params = self._parse_route(route)
-        content_type = self.headers.get("Content-Type", "")
-        if content_type == "text/x-www-form-urlencoded":
-            self.data = self._parse_url_encoded(self.raw.decode())
-        elif content_type.startswith("application/json"):
-            self.data = json.loads(self.raw.decode())
+        content_type, _, charset = self.headers.get("Content-Type", "").partition(";")
+        key, _, value = charset.partition("=")
+        if content_type == "application/x-www-form-urlencoded":
+            self.data = self._parse_url_encoded(self.raw.decode(value or "utf-8"))
+        elif content_type == "application/json":
+            self.data = json.loads(self.raw.decode(value or "utf-8"))
         else:
             self.data = {}
+
+    def _parse_accept(self, accept):
+        res = []
+        for leaf in accept.split(","):
+            a, *_ = leaf.split(";")
+            res.append(a.strip())
+
+        return res
 
     def _parse_url_encoded(self, datas):
         res = {}
@@ -101,55 +80,23 @@ class Request:
         return {
             "Server": "Linek/0.0.0",
             "Date": datetime.utcnow().strftime("%a %d %b %Y %H:%M:%S GMT"),
-            "Connection": "keep-alive",
         }
 
     def make_response(
         self,
         code=200,
-        content_type=None,
         headers=None,
         datas=None,
-        render=True,
-        title="Schtroumpfed !",
     ):
-        """cette fonction fait trop de trucs :thinking:
-        le param render ne sert que si datas est truthy
-        le param title ne sert que si on renvoie de l'html
-        """
-        heads = self._default_headers()
-        heads.update(headers or {})
+        """ construit la réponse HTTP """
+        response_headers = self._default_headers()
+        response_headers.update(headers or {})
 
         if datas:
-
-            if not content_type:
-                for accept in self.accepts:
-                    if accept in ("application/json", "text/html", "text/plain"):
-                        content_type = accept
-                        break
-                else:
-                    content_type = "text/plain"
-            heads["Content-Type"] = content_type
-
-            if render and isinstance(datas, (list, dict, int, float, bool)):
-                if content_type == ("application/json"):
-                    datas = json.dumps(datas).encode()
-                elif content_type == ("text/html"):
-                    datas = render_html(datas)
-                else:
-                    datas = render_text(datas)
-
-            if content_type == "text/html":
-                datas = make_html(title, datas)
-
-            if isinstance(datas, str):
-                datas = datas.encode()
-            elif not isinstance(datas, bytes):
-                datas = str(datas).encode()
-            heads["Content-Length"] = len(datas)
+            response_headers["Content-Length"] = len(datas)
         response = f"HTTP/1.0 {code} {HTTP_CODES[code]}\r\n"
-        if heads:
-            for key, val in heads.items():
+        if response_headers:
+            for key, val in response_headers.items():
                 response += f"{key}: {val}\r\n"
         response += "\r\n"
         response = response.encode()
@@ -161,11 +108,9 @@ class Request:
         return response
 
     def not_found(self):
-        return self.make_response(
-            404,
-            content_type="text/html",
-            title="404 Not Schtroumpf",
-            datas="""\
+        html = make_html(
+            "404 Not Schtroumpf",
+            """\
 <body>
     <h1>Not Schtroumpf</h1>
     <p>
@@ -173,7 +118,11 @@ class Request:
         please schtroumpf your spelling and schtroumpf again.
     </p>
 </body>""",
-            render=False,
+        )
+        return self.make_response(
+            404,
+            headers={"Content-Type": "text/html;charset=utf-8"},
+            datas=html.encode(),
         )
 
 
@@ -182,22 +131,21 @@ class HTTPServer:
     ou pas
     """
 
-    def __init__(self, hostname, port=8080):
+    def __init__(self, hostname, port=8080, max_threads=4):
         self.hostname = hostname
         self.port = port
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.server.bind((hostname, port))
+        self.max_threads = max_threads
 
     def run(self):
-        self.server.listen(100)
+        self.server.listen(5)
         print(f"server running on {self.hostname}:{self.port}")
-        while True:
-            client, client_info = self.server.accept()
-            t = threading.Thread(
-                target=self._handle_request, args=(client, client_info)
-            )
-            t.start()
+        with ThreadPoolExecutor(max_workers=self.max_threads) as pool:
+            while True:
+                client, client_info = self.server.accept()
+                pool.submit(self._handle_request, client, client_info)
 
     def _parse_headers(self, datas):
         res = {}
@@ -208,8 +156,8 @@ class HTTPServer:
         return res
 
     def _handle_request(self, client, client_info):
+        datas = bytearray()
         try:
-            datas = bytearray()
             datas.extend(client.recv(2048))
             command, rn, datas = datas.partition(b"\r\n")
             if not rn:
@@ -218,7 +166,7 @@ class HTTPServer:
             while b"\r\n\r\n" not in datas and (chunk := client.recv(2048)):
                 datas.extend(chunk)
             headers, rn, datas = datas.partition(b"\r\n\r\n")
-            headers = self._parse_headers(headers.decode())
+            headers = self._parse_headers(headers.decode("ascii"))
             length = int(headers.get("Content-Length", 0))
             while len(datas) < length and (chunk := client.recv(2048)):
                 datas.extend(chunk)
