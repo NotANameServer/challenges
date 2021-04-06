@@ -49,7 +49,7 @@ class Request:
         self.route, self.params = self._parse_route(route)
         content_type, _, charset = self.headers.get("Content-Type", "").partition(";")
         key, _, value = charset.partition("=")
-        if content_type == "text/x-www-form-urlencoded":
+        if content_type == "application/x-www-form-urlencoded":
             self.data = self._parse_url_encoded(self.raw.decode(value or "utf-8"))
         elif content_type == "application/json":
             self.data = json.loads(self.raw.decode(value or "utf-8"))
