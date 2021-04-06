@@ -154,7 +154,12 @@ class CounterServer(server.HTTPServer):
     def post_counter(self, request):
         """ POST / """
         key = request.data.get("name")
-        if not key or key in self.counters or self.counters.is_magic(key):
+        if (
+            not key
+            or not re.fullmatch(r"[a-zA-Z0-9_]+", key)
+            or key in self.counters
+            or self.counters.is_magic(key)
+        ):
             return request.make_response(400)
         self.counters[key] = 0
         datas, headers = render_datas({"name": request.data, "value": 0}, request)
