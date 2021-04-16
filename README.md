@@ -52,3 +52,4 @@ votre candidature pour devenir ambassadeur et rejoindre l'aventure !
 2. [Génération de Labyrinthe](defi02)
 3. [Résolution de Labyrinthe](defi03)
 4. [Implémentation d'un serveur HTTP](defi04)
+5. [Automates cellulaires](defi05)
