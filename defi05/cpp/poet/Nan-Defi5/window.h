@@ -7,6 +7,7 @@
 #include <QPixmap>
 #include <QTimer>
 
+#include "renderwidget.h"
 #include "game.h"
 
 class Window : public QWidget
@@ -25,9 +26,7 @@ private:
 
     void OnTimer();
 
-    QGraphicsScene* m_scene;
-    QGraphicsView* m_view;
-    QGraphicsPixmapItem* m_item;
+    RenderWidget* m_render;
     QTimer* m_timer;
 
     Game m_game;

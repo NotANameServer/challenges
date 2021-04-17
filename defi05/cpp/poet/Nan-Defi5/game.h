@@ -14,15 +14,15 @@ public:
 
     void Update();
     void SetSize(int width, int height);
-    QPixmap* GetImage(){return &m_image;}
+
+    Matrix<Gamerules::TileType>* GetData(){return &m_data;}
+    Gamerules* GetGamerules(){return &m_gamerules;}
 
 private:
     void ProcessGameFrame();
-    void UpdateImage();
 
     int m_width;
     int m_height;
-    QPixmap m_image;
 
     Gamerules m_gamerules;
     Matrix<Gamerules::TileType> m_data;
