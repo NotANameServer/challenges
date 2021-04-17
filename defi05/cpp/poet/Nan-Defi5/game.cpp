@@ -1,7 +1,7 @@
 #include "game.h"
 
 Game::Game(int width, int height)
-    : m_data(1, 1, Gamerules::TileType::Ash)
+    : m_data(1, 1, 0)
 {
     SetSize(width, height);
 }
@@ -15,7 +15,7 @@ void Game::SetSize(int width, int height)
 {
     m_width = width;
     m_height = height;
-    m_data.Resize(width, height, Gamerules::TileType::Ash);
+    m_data.Resize(width, height, 0);
 }
 
 void Game::ProcessGameFrame()

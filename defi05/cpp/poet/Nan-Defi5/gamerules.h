@@ -17,38 +17,44 @@ struct EnumClassHash
     }
 };
 
-enum Tile
+struct Tile
 {
-    Ash,
-    YoungTree,
-    OldTree,
-    YoungFire,
-    Fire,
-    OldFire
+    int id;
+    QString name;
+    QColor color;
+
+    Tile(int _id, QString _name, QColor _color)
+        :id(_id), name(_name), color(_color)
+    {}
 };
 
 struct Rule
 {
-    Tile oldValue;
-    Tile newValue;
+    int oldValue;
+    int newValue;
     float proba;
 
-    Tile neighbour;
-    int neighbourNb;
+    int neighbour;
+    int neighbourNbMin;
+    int neighbourNbMax;
 
-    Rule(Tile _old, Tile _new, float _proba)
-        :oldValue(_old), newValue(_new), proba(_proba), neighbour(Tile::Ash), neighbourNb(0)
+    Rule(int _old, int _new, float _proba)
+        :oldValue(_old), newValue(_new), proba(_proba), neighbour(-1), neighbourNbMin(0), neighbourNbMax(8)
     {}
 
-    Rule(Tile _old, Tile _new, float _proba, Tile _neighbour, int _neighbourNb)
-        :oldValue(_old), newValue(_new), proba(_proba), neighbour(_neighbour), neighbourNb(_neighbourNb)
+    Rule(int _old, int _new, float _proba, int _neighbour, int _neighbourNb)
+        :oldValue(_old), newValue(_new), proba(_proba), neighbour(_neighbour), neighbourNbMin(_neighbourNb), neighbourNbMax(8)
+    {}
+
+    Rule(int _old, int _new, float _proba, int _neighbour, int _neighbourNbMin, int _neighbourNbMax)
+        :oldValue(_old), newValue(_new), proba(_proba), neighbour(_neighbour), neighbourNbMin(_neighbourNbMin), neighbourNbMax(_neighbourNbMax)
     {}
 };
 
 class Gamerules
 {
 public:
-    using TileType = Tile;
+    using TileType = int;
 
     Gamerules(int seed = 0);
 
@@ -56,9 +62,28 @@ public:
 
     TileType ProcessRules(const MatrixView<TileType> & m_view);
 
+    Tile* GetTile(int id);
+    Tile* GetTile(QString name);
+    std::vector<int> GetAllTilesID() const;
+    int AddTile(QString name, QColor color);
+    void RemoveTile(QString name);
+    void RemoveTile(int ID);
+
+    Rule* GetRule(int index){return &m_rules[index];}
+    int GetRuleNb() const {return m_rules.size();}
+    void RemoveRule(int index);
+
+    void AddRule(int oldID, int newID, float proba);
+    void AddRule(int oldID, int newID, float proba, int neighbourID, int neighbourNbMin, int neighbourNbMax);
+
 private:
+    int GetTileIndex(int id);
+    int GetTileIndex(QString name);
+    void RemoveTileImp(int index);
+
     void InitRules();
 
+    std::vector<Tile> m_tiles;
     std::vector<Rule> m_rules;
     std::mt19937 m_rand;
 };
