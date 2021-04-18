@@ -13,3 +13,6 @@
 [submodule "defi05/cpp/tutosfaciles48"]
 	path = defi05/cpp/tutosfaciles48
 	url = https://github.com/tutosfaciles48/TotalisticNumber
+[submodule "defi05/java/florent"]
+	path = defi05/java/florent
+	url = https://github.com/florentm35/game-of-lide
