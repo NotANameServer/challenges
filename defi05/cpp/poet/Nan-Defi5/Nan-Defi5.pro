@@ -27,14 +27,16 @@ SOURCES += \
         window.cpp \
     game.cpp \
     gamerules.cpp \
-    renderwidget.cpp
+    renderwidget.cpp \
+    ruleswindow.cpp
 
 HEADERS += \
         window.h \
     game.h \
     matrix.h \
     gamerules.h \
-    renderwidget.h
+    renderwidget.h \
+    ruleswindow.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

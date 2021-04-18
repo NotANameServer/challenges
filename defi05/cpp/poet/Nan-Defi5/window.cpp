@@ -13,8 +13,15 @@ Window::Window(QWidget *parent)
     m_render->SetData(m_game.GetData());
     m_render->SetGamerules(m_game.GetGamerules());
 
+    m_ruleWindow = new RulesWindow();
+    m_ruleWindow->SetGamerules(m_game.GetGamerules());
+
+    QHBoxLayout* rulesLayout = new QHBoxLayout();
+    rulesLayout->addWidget(m_render, 1);
+    rulesLayout->addWidget(m_ruleWindow);
+
     QVBoxLayout* mainLayout = new QVBoxLayout();
-    mainLayout->addWidget(m_render);
+    mainLayout->addLayout(rulesLayout);
 
     setLayout(mainLayout);
 

@@ -5,7 +5,7 @@
 RenderWidget::RenderWidget(QWidget *parent)
     : QWidget(parent), m_image(1, 1, QImage::Format_RGB32)
 {
-
+    setMinimumSize(200, 200);
 }
 
 void RenderWidget::paintEvent(QPaintEvent*)

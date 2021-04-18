@@ -64,6 +64,7 @@ public:
 
     Tile* GetTile(int id);
     Tile* GetTile(QString name);
+    Tile* GetTileFromIndex(int index){return &m_tiles[index];}
     std::vector<int> GetAllTilesID() const;
     int AddTile(QString name, QColor color);
     void RemoveTile(QString name);

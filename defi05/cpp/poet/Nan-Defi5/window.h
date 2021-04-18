@@ -8,6 +8,7 @@
 #include <QTimer>
 
 #include "renderwidget.h"
+#include "ruleswindow.h"
 #include "game.h"
 
 class Window : public QWidget
@@ -26,6 +27,7 @@ private:
 
     void OnTimer();
 
+    RulesWindow* m_ruleWindow;
     RenderWidget* m_render;
     QTimer* m_timer;
 
