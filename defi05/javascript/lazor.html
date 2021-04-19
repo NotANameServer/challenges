@@ -11,8 +11,8 @@ const v=(  // canVas
  document.children[0].children[1].children[0]);
 const t=(  // conText
  v.getContext('2d'));
-const s=3; // pixel Size
-const e=8; // world Exponent
+const s=1; // pixel Size
+const e=10; // world Exponent
 const c=[  // Colors
  '#000','#7FFF00','#228B22','#BDB76B','#B22222','#FF8C00'];
 const a=[  // Automaton
@@ -31,13 +31,15 @@ const a=[  // Automaton
 ];
 const l=(  // Line Length
  Math.pow(2, e));
-const w=(  // World
- new Array(l*l).fill(0));
+let w1=(  // World
+ new Array(l*l).fill(1));
+let w2=(
+ new Array(l*l).fill(1));
 
 v.width=l*s;
 v.height=l*s;
 
-function N(x,y) {  // Neighbores
+function N(w,x,y) {  // Neighbores
  let n,i,j;
  n=new Array(6).fill(0);
  for(i=x-1;i<x+2;i++)
@@ -47,23 +49,26 @@ function N(x,y) {  // Neighbores
  return n;
 }
 function T() {  // Tick
- let n,i,p,r;
- for(i=0;i<l*l;i++){
-  p=Math.random();
-  n=N(i&(l-1),i>>e);
-  for(r of a[w[i]])
-   if(r[1]>=p&&r[2](n)){
-     w[i]=r[0];
+ let i,r,x,y;
+ for(i=0;i<l*l;i++) {
+  w2[i]=w1[i];
+  for(r of a[w1[i]])
+   if (r[1]>=Math.random()) {
+    x=i&(l-1);
+    y=i>>e;
+    if (r[2](N(w1,x,y))) {
+     w2[i] = r[0];
+     t.fillStyle=c[w2[i]];
+     t.fillRect(s*x,s*y,s,s);
      break;
+    }
    }
  }
- t.clearRect(0,0,l*s,l*s);
- for (i=0;i<l*l;i++) {
-  t.fillStyle=c[w[i]];
-  t.fillRect(s*(i&(l-1)),s*(i>>e),s,s);
- }
+ [w1,w2]=[w2,w1];
+ //setTimeout(requestAnimationFrame, 0, T); slower
+ requestAnimationFrame(T);
 }
-setInterval(T,33);
+T()
 </script>
 </body>
 </html>
