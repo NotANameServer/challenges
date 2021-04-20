@@ -29,29 +29,23 @@
 		<button  id="button">Générer</button>
 	</div>
 	<div>
+		<canvas id="canvas"></canvas>
+	</div>
+
+	<div>
 		<pre id="world"></pre>
 	</div>
 </body>
 <script type="text/javascript">
 
+let instance = false;
 
 class forest
 {
 	constructor(x,y,startState){
+		instance = this;
 		this.world = this.init(x,y,startState);
-		//console.log(this.world);  //ok
-		
-		setInterval(()=> this.changeWorld(this.world,x),300);
-		
-	}
-
-	//getters setters
-	getWorld(){
-		return this.world;
-	}
-
-	setWorld(world){
-		this.world = world;
+		this.rend = setInterval(()=> this.changeWorld(this.world,x,y),300);
 	}
 
 	//création du monde
@@ -85,13 +79,10 @@ class forest
 		    		border.push(world[i-1][j-1],world[i-1][j],world[i-1][j+1],world[i][j-1],world[i][j+1],world[i+1][j-1],world[i+1][j],world[i+1][j+1])
 		    	}
 		    	//mise a jour de la cellule
-		    	//console.log(world, border); //ok
 		        let state = this.setNewState(line[j], border);
-		        //console.log(state); //ok
 		        line[j] = state;
 		    }
 		}
-		//console.log(world);// ok
 		return world;
 	}
 
@@ -99,42 +90,32 @@ class forest
 	setNewState(cellValue,border){
 		let rand = Math.random() * 100;
 		let newval = 0;
-		//console.log(cellValue,border,rand); ok
 		switch (cellValue) {
-			//cendres
 		  	case 0:
 		    	newval = this.startGrow(rand);
 		    	break;
-		    //foret jeune
 		  	case 1:
 		   		newval = this.growOrStartBurn(rand,border);
 		    	break;
-		    //foret anciène
 		  	case 2:
 		   		newval = this.startBurn(rand,border);
 		    	break;
-		    //debut combustion
 		    case 3:
 		   		newval = this.burn(rand);
 		    	break;
-		    //combustion
 		    case 4:
 		   		newval = this.finishBurn(rand);
 		    	break;
-		    //fin conbustion
 		    case 5:
 		   		newval = this.makeAsh(rand);
 		    	break;
 		}
-		//console.log(newval); ok
 		return newval;
 	}
 
 	startGrow(rand){
 		let newState = 0;
-		if(rand <= 0.1){
-			newState = 1;
-		}
+		if(rand <= 0.1){newState = 1;}
 		return newState;
 	}
 
@@ -177,81 +158,81 @@ class forest
 
 	burn(rand){
 		let newState = 3;
-		if(rand <= 10){
-			newState = 4;
-		}
+		if(rand <= 10){newState = 4;}
 		return newState;
 	}
 
 	finishBurn(rand){
 		let newState = 4;
-		if(rand <= 10){
-			newState = 5;
-		}
+		if(rand <= 10){newState = 5;}
 		return newState;
 	}
 
 	makeAsh(rand){
 		let newState = 5;
-		if(rand <= 10){
-			newState = 0;
-		}
+		if(rand <= 10){newState = 0;}
 		return newState;
 	}
 
-	changeWorld(world,x){
+	changeWorld(world,x,y){
 		console.log('+');
-		//console.log(world);  ok
 		this.actualise(world);
-		this.render(world,x);
+		this.renderInCanvas(world,x,y);
+		//this.renderEmoji(world,x);
 	}
 
-	render(world,x){
-		const result = document.getElementById('world');
+	renderEmoji(world,x){
+		let result = document.getElementById('world');
 		let tabres = [];
 		for(let i = 0 ; i < world.length; i++){ 
 			let newmap = world[i].map(elem =>{
-				if(elem ===0){
-					return '&#128128';
-					
-				}
-				else if(elem ===1){
-					return '&#127793';
-				}
-				else if(elem ===2){
-					return '&#127795';
-				}
-				else if(elem ===3){
-					return '&#128165';
-				}
-				else if(elem ===4){
-					return '&#128293';
-				}
-				else{
-					return '&#x1F9EF;';
-				}
+				if(elem ===0){return '&#128128';}
+				else if(elem ===1){return '&#127793';}
+				else if(elem ===2){return '&#127795';}
+				else if(elem ===3){return '&#128165';}
+				else if(elem ===4){return '&#128293';}
+				else{return '&#x1F9EF;';}
 			});
 			tabres.push(newmap +'\n'); 
 		}
-		
 		result.innerHTML = tabres;
 		tabres = [];
 	}
+
+
+	renderInCanvas(world,x,y){
+		let canvas = document.getElementById('canvas');
+		let canvaswidth = x * 10;
+		let canvasheight = y * 10;
+		canvas.setAttribute("width", canvaswidth);
+		canvas.setAttribute("height", canvasheight);
+		let ctx = canvas.getContext('2d');
+		for(let i=0; i<y; i++){
+			for(let j=0; j<x; j++){
+				if(world[i][j] === 0){ctx.fillStyle = '#000000'; ctx.fillRect(j*10, i*10, 10, 10);}
+				else if(world[i][j] === 1){ctx.fillStyle = '#58d68d'; ctx.fillRect(j*10, i*10, 10, 10);}
+				else if(world[i][j] === 2){ctx.fillStyle = '#1e8449'; ctx.fillRect(j*10, i*10, 10, 10);}
+				else if(world[i][j] === 3){ctx.fillStyle = '#f39c12'; ctx.fillRect(j*10, i*10, 10, 10);}
+				else if(world[i][j] === 4){ctx.fillStyle = '#c0392b'; ctx.fillRect(j*10, i*10, 10, 10);}
+				else{ctx.fillStyle = '#1e35f7'; ctx.fillRect(j*10, i*10, 10, 10);}
+			}
+		}
+	}
 }
 
-
-
-button.onclick = () =>{
+let button = document.getElementById('button');
+button.addEventListener("click", function() {
 	let width = parseInt(document.getElementById('x').value);
 	let height =  parseInt(document.getElementById('y').value);
 	let opt =  parseInt(document.getElementById('state').value);
-	let button = document.getElementById('button');
-	//console.log(width,height,opt);
-	new forest(width,height,opt);
-	button.style.display ='none';
-};
-
-
+	if(instance){
+		delete instance.world;
+		instance.world = instance.init(width,height,opt);
+	}
+	else{
+ 		instance = new forest(width,height,opt);
+	}
+});
 	
 </script>
 </html>
