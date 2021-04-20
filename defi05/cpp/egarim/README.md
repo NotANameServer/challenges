@@ -4,16 +4,8 @@
 ### src
 ---
 Dev en c++ avec Qt.
-
-### app
----
-##### macOS Big Sur (11.2.3)
-
-- A tester s'il fonctionne sans recompiler from source.
-
-##### Windows
-
-- Fonctionne sans recompiler. Testé sous Windows 7 et 10.
+Le fichier README.jpg, c'est un fichier généré à partir du fichier README.pdf qui est à la racine du répertoire defi05.
+Il n'est pas push pour éviter les doublons.
 
 ### Todo
 ---
