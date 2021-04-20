@@ -10,12 +10,13 @@
 [submodule "defi04/java/florent"]
 	path = defi04/java/florent
 	url = https://github.com/florentm35/httpServer
-[submodule "defi05/cpp/tutosfaciles48"]
-	path = defi05/cpp/tutosfaciles48
-	url = https://github.com/tutosfaciles48/TotalisticNumber
 [submodule "defi05/java/florent"]
 	path = defi05/java/florent
 	url = https://github.com/florentm35/game-of-lide
+[submodule "defi05/cpp/tutosfaciles48"]
+	path = defi05/cpp/tutosfaciles48
+	url = https://github.com/tutosfaciles48/TotalisticNumber
 [submodule "defi05/python/avanini"]
 	path = defi05/python/avanini
 	url = https://gitlab.com/fblanchet/defi-nan
+  
