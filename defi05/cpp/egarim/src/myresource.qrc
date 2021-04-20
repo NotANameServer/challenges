@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/res/images">
-        <file alias="README_JPG">README.jpg</file>
-    </qresource>
-</RCC>
