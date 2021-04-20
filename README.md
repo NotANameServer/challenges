@@ -29,9 +29,14 @@ gagner est de passer du bon temps et d’apprendre des nouvelles choses.
 
 ## Soumettre sa participation
 
-Pour soumettre votre participation, nous vous invitons à faire une PR avec votre projet (soumission) dans `defiXX/<langage>/<pseudo>` (`<pseudo>` peut être un dossier ou un fichier).
+Pour soumettre votre participation, nous vous invitons à faire une PR
+avec votre projet (soumission) dans `defiXX/<langage>/<pseudo>`,
+`<pseudo>` peut être un dossier ou un fichier.
 
-Si vous le souhaitez, vous pouvez utiliser un [sous-module Git](https://git-scm.com/docs/git-submodule) pointant vers votre repo au lieu de directement inclure votre soumission, dans ce cas, vous devez l'ajouter de cette façon :
+Si vous le souhaitez, vous pouvez utiliser un [sous-module Git](https://git-scm.com/docs/git-submodule),
+pointant vers votre repo au lieu de directement inclure votre soumission,
+dans ce cas, vous devez l'ajouter de cette façon :
+
 ```sh
 # clonez votre fork (si ce n'est pas déjà fait)
 $ git clone https://github.com/<pseudo>/challenges
@@ -48,7 +53,8 @@ $ git commit -am "..."
 $ git push origin <nom de la branche>
 ```
 
-Toutefois, pour faciliter la tâche des correcteurs, nous vous recommandons de ne pas utiliser de sous-module.
+Toutefois, pour faciliter la tâche des correcteurs,
+nous vous recommandons de ne pas utiliser de sous-module.
 
 ## Les ambassadeurs et assistants
 
