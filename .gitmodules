@@ -19,6 +19,3 @@
 [submodule "defi05/python/avanini"]
 	path = defi05/python/avanini
 	url = https://gitlab.com/fblanchet/defi-nan
-[submodule "defi05/javascript/sky-zoo"]
-	path = defi05/javascript/sky-zoo
-	url = https://github.com/chrisgit07/challenges.git
