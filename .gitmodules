@@ -19,3 +19,6 @@
 [submodule "defi05/python/avanini"]
 	path = defi05/python/avanini
 	url = https://gitlab.com/fblanchet/defi-nan
+[submodule "defi05/python/MTrezzy"]
+	path = defi05/python/MTrezzy
+	url = https://github.com/MTrezzy/Jeu-de-la-vie_virus
