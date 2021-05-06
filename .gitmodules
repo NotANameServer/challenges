@@ -10,6 +10,9 @@
 [submodule "defi04/java/florent"]
 	path = defi04/java/florent
 	url = https://github.com/florentm35/httpServer
+[submodule "defi04/crystal/Superkooka"]
+	path = defi04/crystal/Superkooka
+	url = https://git.superkooka.com/Superkooka/WebCrystal
 [submodule "defi05/java/florent"]
 	path = defi05/java/florent
 	url = https://github.com/florentm35/game-of-lide
