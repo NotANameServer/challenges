@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>forest</title>
+</head>
+<body>
+	<div>
+		<label>largeur du monde</label>
+		<input  id="x" type="number" name="x">
+	</div>
+	<div>
+		<label>hauteur du monde</label>
+		<input  id="y" type="number" name="y">
+	</div>
+	<div>
+		<label>Etat de départ</label>
+		<select id="state">
+			<option value="none"></option>
+			<option value="0">Cendres</option>
+			<option value="1">Jeune foret</option>
+			<option value="2">Ancienne foret</option>
+			<option value="3">Début de combustion</option>
+			<option value="4">Combustion</option>
+			<option value="5">Fin de Combustion</option>
+		</select>
+	</div>
+	<div>
+		<button  id="button">Générer</button>
+	</div>
+	<div>
+		<canvas id="canvas"></canvas>
+	</div>
+
+	<div>
+		<pre id="world"></pre>
+	</div>
+</body>
+<script type="text/javascript">
+
+let instance = false;
+
+class forest
+{
+	constructor(x,y,startState){
+		instance = this;
+		this.world = this.init(x,y,startState);
+		this.rend = setInterval(()=> this.changeWorld(this.world,x,y),300);
+	}
+
+	//création du monde
+	init(x,y,startState){
+		let world = [];
+		let el = startState;
+		for(let i = 0; i< y; i++){
+			let line = [];
+			for(let j = 0; j< x; j++){
+				line.push(el);
+			}
+			world.push(line);
+		}
+		return world;
+	}
+
+	//mise à jour du monde
+	actualise(world){
+		for(var i = 0; i < world.length; i++) {
+		    let line = world[i];
+		    for(var j = 0; j < line.length; j++) {
+		    	//recup des bordures
+		    	let border = [];
+		    	if(world[i-1] === undefined){
+		    		border.push(world[i][j-1],world[i][j+1],world[i+1][j-1],world[i+1][j],world[i+1][j+1])
+		    	}
+		    	else if(world[i+1] === undefined){
+		    		border.push(world[i-1][j-1],world[i-1][j],world[i-1][j+1],world[i][j-1],world[i][j+1])
+		    	}
+		    	else{
+		    		border.push(world[i-1][j-1],world[i-1][j],world[i-1][j+1],world[i][j-1],world[i][j+1],world[i+1][j-1],world[i+1][j],world[i+1][j+1])
+		    	}
+		    	//mise a jour de la cellule
+		        let state = this.setNewState(line[j], border);
+		        line[j] = state;
+		    }
+		}
+		return world;
+	}
+
+	//mise a jour d'une cellule
+	setNewState(cellValue,border){
+		let rand = Math.random() * 100;
+		let newval = 0;
+		switch (cellValue) {
+		  	case 0:
+		    	newval = this.startGrow(rand);
+		    	break;
+		  	case 1:
+		   		newval = this.growOrStartBurn(rand,border);
+		    	break;
+		  	case 2:
+		   		newval = this.startBurn(rand,border);
+		    	break;
+		    case 3:
+		   		newval = this.burn(rand);
+		    	break;
+		    case 4:
+		   		newval = this.finishBurn(rand);
+		    	break;
+		    case 5:
+		   		newval = this.makeAsh(rand);
+		    	break;
+		}
+		return newval;
+	}
+
+	startGrow(rand){
+		let newState = 0;
+		if(rand <= 0.1){newState = 1;}
+		return newState;
+	}
+
+	growOrStartBurn(rand,border){
+		let probaburn = 0;
+		let probagrow = 0.5;
+		let newState = 1;
+		if(rand <= probagrow){
+			newState = 2;
+		}
+		border.forEach(elem=>{
+			if(elem === 3){probaburn += 1};
+			if(elem === 4){probaburn += 2};
+			if(elem === 5){probaburn += 1};
+		});
+		if(rand <= probaburn){
+			newState = 2;
+		}
+		return newState;
+	}
+
+	startBurn(rand,border){
+		let proba = 0;
+		let surproba = 0;
+		let cells = 0;
+		let newState = 2;
+		border.forEach(elem=>{
+			if(elem === 2){cells += 1};
+			if(elem === 3){proba += 10};
+			if(elem === 4){proba += 20};
+			if(elem === 5){proba += 10};
+		});
+		if(cells >= 5){surproba = 0.005};
+		let fullproba = proba + surproba;
+		if(rand <= fullproba){
+			newState = 3;
+		}
+		return newState;
+	}
+
+	burn(rand){
+		let newState = 3;
+		if(rand <= 10){newState = 4;}
+		return newState;
+	}
+
+	finishBurn(rand){
+		let newState = 4;
+		if(rand <= 10){newState = 5;}
+		return newState;
+	}
+
+	makeAsh(rand){
+		let newState = 5;
+		if(rand <= 10){newState = 0;}
+		return newState;
+	}
+
+	changeWorld(world,x,y){
+		console.log('+');
+		this.actualise(world);
+		this.renderInCanvas(world,x,y);
+		//this.renderEmoji(world,x);
+	}
+
+	renderEmoji(world,x){
+		let result = document.getElementById('world');
+		let tabres = [];
+		for(let i = 0 ; i < world.length; i++){ 
+			let newmap = world[i].map(elem =>{
+				if(elem ===0){return '&#128128';}
+				else if(elem ===1){return '&#127793';}
+				else if(elem ===2){return '&#127795';}
+				else if(elem ===3){return '&#128165';}
+				else if(elem ===4){return '&#128293';}
+				else{return '&#x1F9EF;';}
+			});
+			tabres.push(newmap +'\n'); 
+		}
+		result.innerHTML = tabres;
+		tabres = [];
+	}
+
+
+	renderInCanvas(world,x,y){
+		let canvas = document.getElementById('canvas');
+		let canvaswidth = x * 10;
+		let canvasheight = y * 10;
+		canvas.setAttribute("width", canvaswidth);
+		canvas.setAttribute("height", canvasheight);
+		let ctx = canvas.getContext('2d');
+		for(let i=0; i<y; i++){
+			for(let j=0; j<x; j++){
+				if(world[i][j] === 0){ctx.fillStyle = '#000000'; ctx.fillRect(j*10, i*10, 10, 10);}
+				else if(world[i][j] === 1){ctx.fillStyle = '#58d68d'; ctx.fillRect(j*10, i*10, 10, 10);}
+				else if(world[i][j] === 2){ctx.fillStyle = '#1e8449'; ctx.fillRect(j*10, i*10, 10, 10);}
+				else if(world[i][j] === 3){ctx.fillStyle = '#f39c12'; ctx.fillRect(j*10, i*10, 10, 10);}
+				else if(world[i][j] === 4){ctx.fillStyle = '#c0392b'; ctx.fillRect(j*10, i*10, 10, 10);}
+				else{ctx.fillStyle = '#1e35f7'; ctx.fillRect(j*10, i*10, 10, 10);}
+			}
+		}
+	}
+}
+
+let button = document.getElementById('button');
+button.addEventListener("click", function() {
+	let width = parseInt(document.getElementById('x').value);
+	let height =  parseInt(document.getElementById('y').value);
+	let opt =  parseInt(document.getElementById('state').value);
+	if(instance){
+		delete instance.world;
+		instance.world = instance.init(width,height,opt);
+	}
+	else{
+ 		instance = new forest(width,height,opt);
+	}
+});
+	
+</script>
+</html>
