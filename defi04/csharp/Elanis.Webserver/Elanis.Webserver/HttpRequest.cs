@@ -21,17 +21,16 @@ namespace Elanis.Webserver {
 			this.RawHeadersLines = this.rawRequestContent.Substring(0, headerEnd).Split("\n");
 			this.Body = this.rawRequestContent[(headerEnd + 2)..];
 
-			this.ParseHeaders();
 			this.ParseRequest();
 		}
 
 		private void ParseHeaders() {
 			foreach (string line in RawHeadersLines) {
-				int commaIndex = line.IndexOf(":");
+				int colonIndex = line.IndexOf(":");
 
-				if (commaIndex > 0) {
-					string headerName = line.Substring(0, commaIndex);
-					string headerValue = line[(commaIndex + 1)..].Trim();
+				if (colonIndex > 0) {
+					string headerName = line.Substring(0, colonIndex);
+					string headerValue = line[(colonIndex + 1)..].Trim();
 
 					this.Headers[headerName] = headerValue;
 				}
@@ -39,6 +38,8 @@ namespace Elanis.Webserver {
 		}
 
 		private void ParseRequest() {
+			this.ParseHeaders();
+
 			string[] firstLineWords = RawHeadersLines[0].Split(' ');
 
 			try {
