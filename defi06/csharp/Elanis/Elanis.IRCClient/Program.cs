@@ -11,7 +11,7 @@ namespace Elanis.IRCClient {
 		private const string nickname = "Elanis";
 		static string lastChannel = "";
 
-		static void WaitUserInputMsg(Socket sender) {
+		static void WaitUserInputMsg() {
 			Console.ForegroundColor = ConsoleColor.White;
 			Console.Write("\r>: ");
 		}
@@ -20,7 +20,7 @@ namespace Elanis.IRCClient {
 			Console.ForegroundColor = ConsoleColor.DarkGray;
 			Console.WriteLine("\r[SOCKET SEND] " + msg);
 
-			WaitUserInputMsg(sender);
+			WaitUserInputMsg();
 
 			sender.Send(Encoding.UTF8.GetBytes(msg + "\r\n"));
 		}
@@ -44,7 +44,7 @@ namespace Elanis.IRCClient {
 				Console.WriteLine("\r[SOCKET RECIEVE] " + data);
 			}
 
-			WaitUserInputMsg(sender);
+			WaitUserInputMsg();
 		}
 
 		static void LoopRecieve(Socket sender) {
@@ -82,7 +82,7 @@ namespace Elanis.IRCClient {
 				lastChannel = parts[1];
 				str = "JOIN " + lastChannel;
 			} else if (str.StartsWith(":")) {
-				str = str.Substring(1);
+				str = str[1..];
 			} else {
 				str = "PRIVMSG " + lastChannel + " :" + str;
 			}
@@ -97,7 +97,7 @@ namespace Elanis.IRCClient {
 			Login(sender);
 
 			while (true) {
-				WaitUserInputMsg(sender);
+				WaitUserInputMsg();
 				str = Console.ReadLine();
 
 				if (str == ":q") {
@@ -117,10 +117,10 @@ namespace Elanis.IRCClient {
 				// This example uses port 11000 on the local computer.  
 				IPHostEntry ipHostInfo = Dns.GetHostEntry(serverAddr);
 				IPAddress ipAddress = ipHostInfo.AddressList[0];
-				IPEndPoint remoteEP = new IPEndPoint(ipAddress, serverPort);
+				IPEndPoint remoteEP = new(ipAddress, serverPort);
 
 				// Create a TCP/IP  socket.  
-				Socket sender = new Socket(ipAddress.AddressFamily,
+				Socket sender = new(ipAddress.AddressFamily,
 					SocketType.Stream, ProtocolType.Tcp);
 
 				// Connect the socket to the remote endpoint. Catch any errors.  
