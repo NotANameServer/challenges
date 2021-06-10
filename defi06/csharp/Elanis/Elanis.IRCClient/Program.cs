@@ -22,12 +22,14 @@ namespace Elanis.IRCClient {
 
 			WaitUserInputMsg(sender);
 
-
 			sender.Send(Encoding.UTF8.GetBytes(msg + "\r\n"));
 		}
 
 		static void Answer(Socket sender, string data) {
-			if (data == "PING drlazor.be\r\n") {
+			if (data.Contains("PRIVMSG " + lastChannel)) {
+				Console.WriteLine(data.Replace(" PRIVMSG", ""));
+				return;
+			} else if (data == "PING drlazor.be\r\n") {
 				Send(sender, "PONG drlazor.be");
 
 				Console.ForegroundColor = ConsoleColor.DarkBlue;
@@ -56,21 +58,43 @@ namespace Elanis.IRCClient {
 					continue;
 				}
 
-				if (strData.Contains("PRIVMSG " + lastChannel)) {
-					Console.WriteLine(strData.Replace(" PRIVMSG", ""));
-					return;
-				}
-
 				Answer(sender, strData);
 			}
+		}
+
+		static void Login(Socket sender) {
+			Send(sender, "NICK " + nickname);
+			Send(sender, string.Format("USER {0} 0 * :{0}", nickname));
+		}
+
+		static string ReplaceEmojis(string str) {
+			str = str.Replace(":shrug:", "¯\\_(ツ)_/¯");
+			str = str.Replace(":tableflip:", "(╯°□°）╯︵ ┻━┻");
+
+			return str;
+		}
+
+		static void DoAction(Socket sender, string str) {
+			str = ReplaceEmojis(str);
+
+			if (str.StartsWith(":join ")) {
+				string[] parts = str.Split(" ");
+				lastChannel = parts[1];
+				str = "JOIN " + lastChannel;
+			} else if (str.StartsWith(":")) {
+				str = str.Substring(1);
+			} else {
+				str = "PRIVMSG " + lastChannel + " :" + str;
+			}
+
+			Send(sender, str);
 		}
 
 		static void LoopSend(Socket sender) {
 			string str;
 			byte[] bytes = new byte[1024]; // Data buffer for incoming data.  
 
-			Send(sender, "NICK Elanis");
-			Send(sender, "USER Elanis 0 * :Elanis");
+			Login(sender);
 
 			while (true) {
 				WaitUserInputMsg(sender);
@@ -80,23 +104,10 @@ namespace Elanis.IRCClient {
 					break;
 				}
 
-				str = str.Replace(":shrug:", "¯\\_(ツ)_/¯");
-				str = str.Replace(":tableflip:", "(╯°□°）╯︵ ┻━┻");
-
-				if (str.StartsWith(":join ")) {
-					string[] parts = str.Split(" ");
-					lastChannel = parts[1];
-					str = "JOIN " + lastChannel;
-				} else if (str.StartsWith(":")) {
-					str = str.Substring(1);
-				} else {
-					str = "PRIVMSG " + lastChannel + " :" + str;
-				}
-
-				Send(sender, str);
+				DoAction(sender, str);
 			}
 
-			sender.Send(Encoding.UTF8.GetBytes("QUIT :Bye !"));
+			Send(sender, "QUIT :Bye !");
 		}
 
 		public static void StartClient() {
