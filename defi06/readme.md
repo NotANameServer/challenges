@@ -1,4 +1,4 @@
-# Défi 5 - Client IRC
+# Défi 6 - Client IRC
 
 Proposé par **Lazor(@87605725857058816)**
 
