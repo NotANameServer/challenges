@@ -82,3 +82,4 @@ votre candidature pour devenir ambassadeur et rejoindre l'aventure !
 3. [Résolution de Labyrinthe](defi03)
 4. [Implémentation d'un serveur HTTP](defi04)
 5. [Automates cellulaires](defi05)
+6. [Client IRC](defi06)
