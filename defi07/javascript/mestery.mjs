@@ -7,6 +7,7 @@ const OPERATORS = {
   '-': (roperand, loperand) => loperand - roperand,
   '*': (roperand, loperand) => loperand * roperand,
   '/': (roperand, loperand) => loperand / roperand,
+  '%': (roperand, loperand) => loperand % roperand,
   '^': (roperand, loperand) => loperand ** roperand,
   '!'(operand) {
     if (!Number.isInteger(operand) || operand < 0) {
@@ -75,18 +76,19 @@ function precedence(operator) {
   return operator === '*' || operator === '/';
 }
 
-function* parseInfix(expression) {
+function* tokenizeInfix(expression) {
   const opstack = [];
 
-  for (let token of expression.split(/([\^!*/()]|\b\s*[-+])/)) {
+  for (let token of expression.toLowerCase().split(/([\^!*%/()√]|\b\s*[-+])/)) {
+    token = token.trim();
+
     if (!token) {
       continue;
     }
-    token = token.trim();
 
     if (token in OPERATORS) {
       // function
-      if (token.length > 1 || token === '!') {
+      if (token.length > 1 || token === '!' || token === '√') {
         opstack.push(token);
         continue;
       }
@@ -127,19 +129,18 @@ function* parseInfix(expression) {
   yield* opstack.reverse();
 }
 
-function parsePostfix(expression) {
-  return expression.split(/\s+/);
+function tokenizePostfix(expression) {
+  return expression.toLowerCase().split(/\s+/);
 }
 
 function evalExpression(expression) {
-  expression = expression.toLowerCase();
   try {
-    return evalPostfix(parseInfix(expression));
-  } catch {
+    return evalPostfix(tokenizeInfix(expression));
+  } catch (error) {
     try {
-      return evalPostfix(parsePostfix(expression));
-    } catch {
-      throw new Error('Invalid expression.');
+      return evalPostfix(tokenizePostfix(expression));
+    } catch (error2) {
+      throw new Error((error.message.length > error2.message.length ? error : error2).message);
     }
   }
 }
@@ -169,16 +170,16 @@ rl.on('line', (line) => {
       if (line.startsWith('e ')) {
         logResult(evalExpression(line.slice(2)));
       } else if (line.startsWith('ei ')) {
-        logResult(evalExpression(parseInfix(line.slice(3))));
+        logResult(evalPostfix(tokenizeInfix(line.slice(3))));
       } else if (line.startsWith('ep ')) {
-        logResult(evalExpression(parsePostfix(line.slice(3))));
+        logResult(evalPostfix(tokenizePostfix(line.slice(3))));
       } else if (line.startsWith('i2p ')) {
-        logResult([...parseInfix(line.slice(4))].join(' '));
+        logResult([...tokenizeInfix(line.slice(4))].join(' '));
       } else {
         logResult(evalExpression(line));
       }
     } catch (error) {
-      console.error(ansi(error.message, '93'));
+      console.error(ansi(error.message, '91'));
     }
   }
 
