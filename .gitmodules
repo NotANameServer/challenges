@@ -29,3 +29,6 @@
 [submodule "defi06/java/florent"]
 	path = defi06/java/florent
 	url = https://github.com/florentm35/client-irc.git
+[submodule "defi07/java/florent"]
+	path = defi07/java/florent
+	url = https://github.com/florentm35/calculatrice.git
