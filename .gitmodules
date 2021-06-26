@@ -26,3 +26,6 @@
 	path = defi05/python/MTrezzy
 	url = https://github.com/MTrezzy/Jeu-de-la-vie_virus
 
+[submodule "defi06/java/florent"]
+	path = defi06/java/florent
+	url = https://github.com/florentm35/client-irc.git
