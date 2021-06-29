@@ -67,7 +67,7 @@ votre candidature pour devenir ambassadeur et rejoindre l'aventure !
 | c | gbdivers#9340 |
 | cpp | gbdivers#9340 |
 | csharp | Kaktus#0006 |
-| html-css | *personne* |
+| html-css | Mishaa#3333 |
 | java | florent#8092 |
 | javascript-typescript | Romain Lanz#0042 et Mestery#3859 |
 | lua | *personne* |
