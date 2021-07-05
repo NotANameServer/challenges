@@ -48,7 +48,7 @@ std::unique_ptr<Node> Parser::term(std::vector<Token>::iterator & actual) {
 
         } else {
             next(actual);
-            result = std::make_unique<Node>(std::move(result), pow(actual), N_MUL, token->value);
+            result = std::make_unique<Node>(std::move(result), pow(actual), N_DIV, token->value);
         }
     }
     return result;
