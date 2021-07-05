@@ -44,7 +44,7 @@ std::unique_ptr<Node> Parser::term(std::vector<Token>::iterator & actual) {
 
         if (actual->type == T_MUL) {
             next(actual);
-            return std::make_unique<Node>(std::move(result), pow(actual), N_MUL, token->value);
+            result = std::make_unique<Node>(std::move(result), pow(actual), N_MUL, token->value);
 
         } else {
             next(actual);
