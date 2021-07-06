@@ -68,7 +68,7 @@ votre candidature pour devenir ambassadeur et rejoindre l'aventure !
 | cpp | *personne* |
 | csharp | Kaktus#0006 |
 | html-css | Mishaa#3333 |
-| java | florent#8092 |
+| java | florent#8092 et Il_totore#9133 |
 | javascript-typescript | Romain Lanz#0042 et Mestery#3859 |
 | lua | *personne* |
 | php | Mjöllnir#3515 et Cara#0385 |
