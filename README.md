@@ -64,8 +64,8 @@ votre candidature pour devenir ambassadeur et rejoindre l'aventure !
 | Langages | Correcteurs |
 | -------- | ----------- |
 | asm | *personne* |
-| c | gbdivers#9340 |
-| cpp | gbdivers#9340 |
+| c | *personne* |
+| cpp | *personne* |
 | csharp | Kaktus#0006 |
 | html-css | Mishaa#3333 |
 | java | florent#8092 |
