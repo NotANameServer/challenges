@@ -118,15 +118,14 @@ class Grid(impl: mutable.Seq[Option[Player.Color]], val columns: Int, val rows: 
     val color = apply(x, y)
     if (color.isEmpty) return false
     var power = 0
-    for (i <- 0 to length) {
+    for (i <- 0 until length) {
       val cellX = x + dx * i
       val cellY = y - dy * i
       if (containsColumn(cellX) && containsRow(cellY) && apply(cellX, cellY).equals(color)) {
         power += 1
-        if (power == length) return true
       } else power = 0
     }
-    false
+    power == length
   }
 
   /**
@@ -150,6 +149,12 @@ class Grid(impl: mutable.Seq[Option[Player.Color]], val columns: Int, val rows: 
    * @return true if all slots have a color
    */
   def isFull: Boolean = !this.contains(None)
+
+  /**
+   * Return a copy of this Grid.
+   * @return a value-based copy of this Grid
+   */
+  def copy: Grid = new Grid(mutable.Seq.from(impl), columns, rows)
 }
 
 object Grid {
