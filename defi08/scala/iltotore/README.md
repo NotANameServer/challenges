@@ -6,7 +6,7 @@ Le code est entièrement documenté via une Scaladoc en anglais (voir le code).
 
 # Lancer l'exemple
 
-Vous pouvez exécuter le projet avec la commande suivante: `mill -i main.run`
+Vous pouvez exécuter le projet avec la commande suivante: `millw -i main.run`
 
 # Grille
 
@@ -50,3 +50,8 @@ Méthode `Human#input` (Player.scala).
 Le projet a été conçu avec de façon à avoir une couche abstraite (via les traits).
 Cette approche permet de gérer différentes implémentations notamment au niveau de l'UI
 (si on veut passer sur un GUI par exemple) ou du joueur (IA/Humain).
+
+# IA
+
+L'IA du projet est relativement simple et "naïve". Elle chaque tour vérifier quel placement est le meilleur sur le court
+terme sans se soucier du joueur (sauf coup gagnant imminent)
