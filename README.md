@@ -84,3 +84,4 @@ votre candidature pour devenir ambassadeur et rejoindre l'aventure !
 5. [Automates cellulaires](defi05)
 6. [Client IRC](defi06)
 7. [Calculatrice](defi07)
+8. [Puissance 4](defi08)
