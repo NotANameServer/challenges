@@ -107,16 +107,29 @@ class Grid(impl: mutable.Seq[Option[Player.Color]], val columns: Int, val rows: 
   /**
    * Check if the given point is aligned with 3 other cells with the same color.
    *
-   * @param x the x (column axis)
-   * @param y the y (row axis)
-   * @param dx the direction on column axis
-   * @param dy the direction on row axis
+   * @param x      the x (column axis)
+   * @param y      the y (row axis)
+   * @param dx     the direction on column axis
+   * @param dy     the direction on row axis
    * @param length the minimum line length (4 in Power4)
    * @return true if a line of size >= `length` pass trough the point at (x, y)
    */
-  def isAligned(x: Int, y: Int, dx: Int, dy: Int, length: Int): Boolean = {
+  def isAligned(x: Int, y: Int, dx: Int, dy: Int, length: Int): Boolean =
+    getPower(x, y, dx, dy, length) == length
+
+  /**
+   * Get the power of the given point.
+   *
+   * @param x      the x (column axis)
+   * @param y      the y (row axis)
+   * @param dx     the direction on column axis
+   * @param dy     the direction on row axis
+   * @param length the minimum line length (4 in Power4)
+   * @return the power (length) of the line with the given direction and passing trough the given point
+   */
+  def getPower(x: Int, y: Int, dx: Int, dy: Int, length: Int): Int = {
     val color = apply(x, y)
-    if (color.isEmpty) return false
+    if (color.isEmpty) return 0
     var power = 0
     for (i <- 0 until length) {
       val cellX = x + dx * i
@@ -125,11 +138,12 @@ class Grid(impl: mutable.Seq[Option[Player.Color]], val columns: Int, val rows: 
         power += 1
       } else power = 0
     }
-    power == length
+    power
   }
 
   /**
    * Check if the game is finished (excluding draw).
+   *
    * @return true if a player won the game
    */
   def isFinished: Boolean = {
@@ -146,12 +160,14 @@ class Grid(impl: mutable.Seq[Option[Player.Color]], val columns: Int, val rows: 
 
   /**
    * Check if the grid is full.
+   *
    * @return true if all slots have a color
    */
   def isFull: Boolean = !this.contains(None)
 
   /**
    * Return a copy of this Grid.
+   *
    * @return a value-based copy of this Grid
    */
   def copy: Grid = new Grid(mutable.Seq.from(impl), columns, rows)
@@ -161,8 +177,9 @@ object Grid {
 
   /**
    * Create an empty grid of the given dimensions.
+   *
    * @param columns the column count
-   * @param rows the row count
+   * @param rows    the row count
    * @return an empty grid of size columns*rows
    */
   def empty(columns: Int, rows: Int): Grid = {

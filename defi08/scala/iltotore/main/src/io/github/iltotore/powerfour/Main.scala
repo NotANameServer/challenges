@@ -24,7 +24,10 @@ object Main extends App {
       colors.get(StdIn.readLine(s"Joueur $i: Quelle-est votre couleur ?"))
         .toRight("Couleur invalide")
     )(ui.sendMessage)
-    Player.Human(name, color)
+
+    if(StdIn.readLine(s"Joueur $i: Êtes-vous un humain ? true/false (par défaut: Oui)") equalsIgnoreCase "false")
+      Player.NaiveAI(name, color)
+    else Player.Human(name, color)
   }
 
   val grid = Grid.empty(7, 6)
