@@ -6,7 +6,7 @@ Le code est entièrement documenté via une Scaladoc en anglais (voir le code).
 
 # Lancer l'exemple
 
-Vous pouvez exécuter le projet avec la commande suivante: `millw -i main.run`
+Vous pouvez exécuter le projet avec la commande suivante: `sh millw -i main.run`
 
 # Grille
 

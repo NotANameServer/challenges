@@ -15,7 +15,7 @@ trait Player {
 
   def color: String
 
-  def play(grid: Grid, ui: UI): (Int, Int)
+  def play(colors: Set[Player.Color], grid: Grid, ui: UI): (Int, Int)
 }
 
 object Player {
@@ -41,7 +41,7 @@ object Player {
       result <- grid.findLocation(column - 1).toRight(s"La colonne $choice est pleine.")
     } yield result
 
-    override def play(grid: Grid, ui: UI): (Int, Int) = Eithers.waitRight(input(grid))(ui.sendMessage)
+    override def play(colors: Set[Player.Color], grid: Grid, ui: UI): (Int, Int) = Eithers.waitRight(input(grid))(ui.sendMessage)
   }
 
 
@@ -52,19 +52,34 @@ object Player {
    */
   case class NaiveAI(name: String, color: String) extends Player {
 
-    override def play(grid: Grid, ui: UI): (Int, Int) = {
+    private def findBestChoice(x: Int, y: Int, playerColor: Player.Color, grid: Grid): Int = {
+      grid.update(x, y, Some(playerColor))
+      val possibilities = for (dx <- -1 to 1; dy <- -1 to 1 if dx != 0 || dy != 0) yield {
+        grid.getPower(x, y, dx, dy, 4)
+      }
+
+      possibilities.max
+    }
+
+    override def play(colors: Set[Player.Color], grid: Grid, ui: UI): (Int, Int) = {
       var choice = (-1, (0, 0))
       for (col <- 0 until grid.columns) breakable {
-        val virtualGrid = grid.copy
-        val location = virtualGrid.findLocation(col)
+        val location = grid.findLocation(col)
         if(location.isEmpty) break()
         val (x, y) = location.get
-        virtualGrid.update(x, y, Some(color))
-        val possibilities = for (dx <- -1 to 1; dy <- -1 to 1 if dx != 0 || dy != 0) yield {
-          grid.getPower(x, y, dx, dy, 4)
+
+        //Counter opponent victory
+
+        for(playerColor <- colors) {
+          if(findBestChoice(x, y, playerColor, grid.copy) >= 4){
+            println(s"counter: $x $y")
+            return (x, y)
+          }
         }
 
-        val bestChoice = possibilities.max
+        //Short-term play
+
+        val bestChoice = findBestChoice(x, y, color, grid.copy)
         if(choice._1 == bestChoice && Random.nextBoolean()) choice = (bestChoice, (x, y))
         if (choice._1 < bestChoice) choice = (bestChoice, (x, y))
       }

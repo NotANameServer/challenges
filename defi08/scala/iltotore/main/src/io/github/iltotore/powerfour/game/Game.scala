@@ -10,7 +10,7 @@ class Game(players: Seq[Player], grid: Grid, ui: UI) {
    */
   def play: Option[Player.Color] = {
     for(player <- players) {
-      val (x, y) = player.play(grid, ui)
+      val (x, y) = player.play(players.map(_.color).toSet, grid, ui)
       grid.update(x, y, Some(player.color))
       ui.showGrid(grid)
       if(grid.isFinished) return Some(s"${player.color}${player.name}$RESET a gagné la partie.")
