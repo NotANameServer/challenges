@@ -32,3 +32,6 @@
 [submodule "defi07/java/florent"]
 	path = defi07/java/florent
 	url = https://github.com/florentm35/calculatrice.git
+[submodule "defi08/java/florent"]
+	path = defi08/java/florent
+	url = https://github.com/florentm35/puissance4.git
