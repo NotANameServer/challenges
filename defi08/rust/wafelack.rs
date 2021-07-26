@@ -88,13 +88,10 @@ fn main() {
     let mut height = [0, 7, 14, 21, 28, 35, 42];
     loop {
         draw(bitboard);
-        if won(bitboard[0]) {
-            println!("X won in {} moves.", counter / 2);
-            break;
-        } else if won(bitboard[1]) {
-            println!("O won in {} moves.", counter / 2);
+        play_turn(&mut bitboard, &mut moves, &mut height, &mut counter);
+        if won(bitboard[counter & 1]) {
+            println!("{} won in {} moves.", if counter & 1 == 0 { "X" } else { "O" }, counter / 2);
             break;
         }
-        play_turn(&mut bitboard, &mut moves, &mut height, &mut counter);
     }
 }
