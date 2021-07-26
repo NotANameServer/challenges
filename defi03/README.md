@@ -1,4 +1,4 @@
-# Défi 3 - Résolution de Labyrinthe
+# Défi 3 - Résolution de labyrinthe
 
 Défi sur un weekend, à rendre pour le lundi 15 mars à 6h du matin au plus tard
 à votre ambassadeur préféré. Le live se déroulera à 20h00, lundi ou mardi.
