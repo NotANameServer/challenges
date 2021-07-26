@@ -1,0 +1,55 @@
+cabal-version:      2.2
+name:               connect4
+version:            1.0
+build-type:         Simple
+license:            MIT
+
+common deps
+    ghc-options:        -Wall -O3
+    default-language:   Haskell2010
+    build-depends:      base,
+                        array,
+                        gloss,
+                        massiv,
+                        mwc-random,
+                        split,
+                        text,
+                        timeit,
+                        vector
+
+library
+    import:             deps
+    hs-source-dirs:     src
+    exposed-modules:    Connect4.Game
+                        Connect4.Bot
+                        Connect4.BotNegamax
+
+executable connect4-cli
+    import:             deps
+    hs-source-dirs:     app
+    main-is:            connect4-cli.hs
+    build-depends:      connect4
+
+executable connect4-cmp
+    import:             deps
+    hs-source-dirs:     app
+    main-is:            connect4-cmp.hs
+    build-depends:      connect4
+
+executable connect4-gui
+    import:             deps
+    hs-source-dirs:     app
+    main-is:            connect4-gui.hs
+    build-depends:      connect4
+
+test-suite spec
+    import:             deps
+    main-is:            Spec.hs
+    hs-source-dirs:     test
+    type:               exitcode-stdio-1.0
+    default-language:   Haskell2010
+    build-depends:      hspec, connect4
+    other-modules:      Connect4.GameSpec
+                        Connect4.BotSpec
+                        Connect4.BotNegamaxSpec
+
