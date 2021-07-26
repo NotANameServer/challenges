@@ -37,3 +37,7 @@
 [submodule "defi08/rust/citorva"]
 	path = defi08/rust/citorva
 	url = https://github.com/citorva/connect_four
+[submodule "defi08/c/Meithal"]
+	path = defi08/c/Meithal
+	url = https://gitlab.com/Meithal/puissance4.git
+  
