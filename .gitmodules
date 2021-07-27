@@ -37,3 +37,6 @@
 [submodule "defi08/c/Meithal"]
 	path = defi08/c/Meithal
 	url = https://gitlab.com/Meithal/puissance4.git
+[submodule "defi08/haskell/sofiane"]
+	path = defi08/haskell/sofiane
+	url = https://github.com/Kugge/Haskell-Connect4
