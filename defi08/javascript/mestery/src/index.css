@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .bordered-md {
+    border-spacing: 0.375rem;
+  }
+}
+
+#board td {
+  @apply rounded-sm bg-purple-300 hover:bg-purple-400;
+}
+
+.red {
+  @apply bg-gradient-to-br from-red-600 to-red-500;
+}
+
+.yellow {
+  @apply bg-gradient-to-br from-yellow-500 to-yellow-400;
+}
