@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="module" src="/src/index.js" defer></script>
+    <title>Faiblesse 4</title>
+  </head>
+
+  <body class="flex flex-col items-center h-screen p-5 bg-gray-50">
+    <h1 class="mb-3 text-5xl font-bold text-indigo-400">Faiblesse 4</h1>
+    <div class="flex items-center mb-2">
+      <span id="turn" class="w-10 h-8 rounded-full red" hidden></span>
+      <span id="result" class="text-lg font-bold text-green-500" hidden></span>
+    </div>
+
+    <div class="flex flex-wrap items-center w-full h-full justify-evenly">
+      <table id="board" class="bg-purple-500 border-separate rounded-md h-38vw w-38vw bordered-md">
+        <tbody></tbody>
+      </table>
+      <div class="flex flex-col items-center p-2">
+        <button id="start" class="py-2 m-2 font-semibold text-white bg-blue-600 rounded-md px-7 hover:bg-blue-700">
+          Commencer
+        </button>
+        <label for="player-1" class="font-semibold text-center text-transparent red bg-clip-text">Joueur 1</label>
+        <select id="player-1" class="px-6 py-2 m-2 text-white bg-blue-600 rounded-md">
+          <option selected>Humain</option>
+          <option>Iafaible</option>
+          <option>Random</option>
+        </select>
+        <label for="player-2" class="font-semibold text-center text-transparent yellow bg-clip-text">Joueur 2</label>
+        <select id="player-2" class="px-6 py-2 m-2 text-white bg-blue-600 rounded-md">
+          <option>Humain</option>
+          <option selected>Iafaible</option>
+          <option>Random</option>
+        </select>
+      </div>
+    </div>
+  </body>
+</html>
