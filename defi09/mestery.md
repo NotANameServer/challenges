@@ -12,13 +12,17 @@ Ce protocole repose sur TCP. Toutefois le serveur peut en option également supp
 - `GAME_END: 4`
 - `JOIN_QUEUE: 5`
 - `QUIT: 6`
+
 ### Erreurs
+
 - `ERR_INVALID_NICK: 7`
 - `ERR_ALREADY_USED_NICK: 8`
 - `ERR_INVALID_COLUMN: 9`
 - `ERR_TIMEOUT: 10`
 
 ## Définitions
+Ce document utilise la grammaire [ABNF](https://datatracker.ietf.org/doc/html/rfc5234).
+
 ```abnf
 message = message-connect /
           message-init /
@@ -29,30 +33,28 @@ message = message-connect /
           message-quit /
           message-error
 
-message-error = "7" / ; ERR_INVALID_NICK
-                "8" / ; ERR_ALREADY_USED_NICK
-                "9" / ; ERR_INVALID_COLUMN
-                "10"  ; ERR_TIMEOUT
+message-error = ( "7" /  "8" / "9" / "10" ) CRLF ; respectively ERR_INVALID_NICK, ERR_ALREADY_USED_NICK, ERR_INVALID_COLUMN, ERR_TIMEOUT
 
 nick = 1*16( ALPHA / DIGIT / "-" / "_" )
-message-connect = "0" nick
+message-connect = "0" nick CRLF
 
 width = OCTET ; uint8 number
 height = OCTET ; uint8 number
-message-init = "1" width height
+message-init = "1" width height CRLF
 
 first-player-name-length = OCTET ; uint8 number (1-16)
-message-game-start = "2" first-player-name-length nick nick ; player 0's name, player 1's name
+message-game-start = "2" first-player-name-length nick nick CRLF ; player 0's name, player 1's name
 
 column = OCTET ; uint8 number (must be between 0 and width-1)
-message-play-move = "3" column
+message-play-move = "3" column CRLF
 
-message-game-end = "4" [ BIT ] ; winner player index or none
+message-game-end = "4" [ BIT ] CRLF ; winner player index or none
 
-message-join-queue = "5"
+message-join-queue = "5" CRLF
 
-message-quit = "6"
+message-quit = "6" CRLF
 ```
+
 ### Timeouts
 *Ces valeurs (par défauts) peuvent varier en fonction de la configuration du serveur.*
 
