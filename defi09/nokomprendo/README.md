@@ -77,7 +77,7 @@ time            = *DIGIT "." DIGIT
 
 move            = "0" / "1" / "2" / "3" / "4" / "5" / "6"   ; numéro de la colonne
 
-status          = "WinR" / "WinY" / "Tie" / "PlayR" / "PlayY"
+status          = "WinR" / "WinY" / "Tie"
 
 gamestatus      = "Ok" / "Timeout"
 ```
@@ -89,10 +89,10 @@ Le client peut gérer son temps au cours de la partie, par exemple en estimant
 le nombre de coups potentiels restant.
 
 Après l'étape de connexion, le client répond aux messages `genmove` du serveur.
-Cependant comme le serveur vérifie le temps, il peut envoyer un `endgame` à
-tout moment et recommencer une nouvelle partie peu de temps après. Typiquement,
-on implémentera donc le calcul d'un coup dans un thread spécifique, qu'on
-interrompera en cas de timeout.
+Cependant comme le serveur vérifie le temps, celui-ci peut envoyer un `endgame`
+à tout moment et recommencer une nouvelle partie peu de temps après.
+Typiquement, le client implémentera donc le calcul d'un coup dans un thread
+spécifique, qu'on interrompera en cas de timeout.
 
 
 ## Exemples
