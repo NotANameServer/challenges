@@ -1,4 +1,4 @@
-# Puissance 4 en reseau
+# Puissance 4 en réseau
 
 Protocole pour jouer au puissance 4 en réseau avec des 
 spectateurs, indépendant de la couche application.
@@ -36,9 +36,6 @@ Dans le cas d'IRC
 ```
 PRIVMSG tata 4 salon1 salon2 salon3 salon4
 ```
-
-On ne rajoute pas de `#` avant les noms de salons, c'est aux
-clients de le faire.
 
 Un salon disponible est un salon qui n'est pas rempli 
 (où une partie n'est pas déjà en cours).
@@ -108,34 +105,12 @@ la partie en cours ou terminée, de la manière qu'il
 veut, par exemple après chaque coup, ou bien en un seul tenant 
 à la fin de la partie.
 
-Si le protocole applicatif ne met pas en mémoire les messages 
-postés dans le passé, un super utilisateur PEUT mémoriser 
-les messages postés et implémenter une commande `replay`. 
-Par exemple si un jouer veut revoir la partie jouée dans 
-le `salon4`, il envoie une commande
- 
- `PRIVMSG toto replay salon4`
-
-Le super utilisateur lui répond en répétant les messages
-publics postés lors de la partie.
-
-Dans ce cas il vaut mieux que chaque salon ait un nom unique
-tant qu'une partie est gardée en mémoire pour éviter les 
-ambiguïtés.
-
-Il implémente également dans ce cas une commande `list replay`
-à laquelle il répond de la même manière que pour `list games`
-un `answer-list-games` sauf qu'il liste les salons qu'il a en 
-mémoire au lieu de salons disponibles pour jouer.
-
 ## Grammaire
 ```abnf
 command = command-list-games \
           command-task-play \
           command-play \
           command-end \
-          command-list-replay \
-          command-replay \
           answer-list-games
 
 
@@ -149,21 +124,10 @@ command-task-play = "play" SP player SP number *(number) CRLF
 
 command-play-simple = "play" CRLF
 
-answer-play = "play" SP number *(number) CRLF
+answer-play = "play" SP ("1" / "2" / "3" / "4" / "5" / "6" / "7") CRLF
 
 command-end = "end" [*(ALPHA / SP)] CRLF
-
-command-list-replay = "list replay" CRLF
-
-command-replay = "replay" SP room CRLF
 
 answer-list-games = DIGIT *(DIGIT) *(SP room) CRLF
 
 ```
-
-Les valeurs de `player` et `room` sont gardées assez simple pour concilier 
-le maximum de protocoles applicatifs.
-
-Le super joueur peut afficher de manière optionelle de manière informative 
-un texte avec la commande `end` pour dire qui a gagné ou signaler un timeout. 
-Ces informations peuvent également être déduites par la succession de messages.
