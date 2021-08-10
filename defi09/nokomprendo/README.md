@@ -18,16 +18,16 @@ qu'une partie soit lancée (ou qu'un nouveau client arrive).
 
 - communication par websocket
 
-- messages textes terminant par " \n"
+- messages textes (terminant par "\r\n")
 
-- une partie débute avec un temps de réflexion donné (par exemple 42s pour
+- une partie débute avec un temps de réflexion donné (par exemple, 42.0s pour
   chaque joueur)
 
 - le temps restant au joueur pour la partie est indiqué quand le serveur
   demande de jouer un coup
 
 - si un client joue un coup invalide, le serveur lui redemande de jouer et
-  compte une pénalité de temps (1s) en plus du temps consommé
+  compte une pénalité de temps (par exemple, 1.0s) en plus du temps consommé
 
 - en cas de timeout, le serveur envoie un message de fin de partie aux deux
   joueurs (le joueur timeout perd la partie); le serveur peut éventuellement
