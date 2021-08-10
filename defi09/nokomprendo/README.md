@@ -14,9 +14,7 @@ qu'une partie soit lancée (ou qu'un nouveau client arrive).
 [exemple d'implémentation](https://github.com/nokomprendo/not-a-connect4)
 
 
-## Protocole
-
-### Généralités
+## Généralités
 
 - communication par websocket
 
@@ -38,40 +36,51 @@ qu'une partie soit lancée (ou qu'un nouveau client arrive).
 - en cas de déconnexion d'un client qui joue, il perd la partie
 
 
-### Paramètres
+## Protocole
 
-- username (sans espacement : ' ', \t, \n, \r)
+[Augmented Backus–Naur form](https://en.wikipedia.org/wiki/Augmented_Backus%E2%80%93Naur_form)
 
-- BOARD: (. | R | Y)x42                         ; ligne0, ligne1...
+```
+message     = message-connect               ; client ----> serveur
+            / message-connected             ; client <---- serveur
+            / message-notconnected          ; client <---- serveur
+            / message-newgame               ; client <---- serveur
+            / message-genmove               ; client <---- serveur
+            / message-playmove              ; client ----> serveur
+            / message-endgame               ; client <---- serveur
 
-- PLAYER: R | Y
 
-- MOVE: 0-6                                     ; numéro de la colonne
+message-connect         = "connect" SP user CRLF
 
-- STATUS: WinR | WinY | Tie | PlayR | PlayY
+message-connected       = "connected" [SP info] CRLF
 
-- GAMESTATUS: Ok | Timeout
+message-notconnected    = "not-connected" [SP info] CRLF
+
+message-newgame         = "newgame" SP user SP user CRLF    
+
+message-genmove         = "genmove" SP board SP color SP time CRLF
+
+message-playmove        = "playmove" SP move CRLF
+
+message-endgame         = "endgame" SP board SP color SP status SP gamestatus CRLF
 
 
-### Messages
+user            = *(ALPHA / DIGIT / "-" / "_")
 
-- légende:
+info            = *(ALPHA / DIGIT / SP)
 
-    - s2c = du serveur à un client
-    - c2s = d'un client au serveur
+board           = 42*("." / color)      ; ligne 0, ligne 1, etc
 
-- messages de connexion:
+color           = "R" / "Y"             ; couleur du client qui reçoit le message
 
-    - `connect <username> \n` (c2s)
-    - `connected [welcome message] \n` (s2c)
-    - `not-connected [error message] \n` (s2c)
+time            = *DIGIT "." DIGIT
 
-- messages de jeu:
+move            = "0" / "1" / "2" / "3" / "4" / "5" / "6"   ; numéro de la colonne
 
-    - `newgame <user> <user> \n` (s2c)
-    - `genmove BOARD COLOR <time> \n` (c2s; COLOR indique le joueur courant)
-    - `playmove MOVE \n` (c2s)
-    - `endgame BOARD COLOR STATUS GAMESTATUS \n` (s2c)
+status          = "WinR" / "WinY" / "Tie" / "PlayR" / "PlayY"
+
+gamestatus      = "Ok" / "Timeout"
+```
 
 
 ## Discussion
