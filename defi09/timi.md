@@ -40,10 +40,11 @@ PRIVMSG tata 4 salon1 salon2 salon3 salon4
 Un salon disponible est un salon qui n'est pas rempli 
 (où une partie n'est pas déjà en cours).
 
-Le joueur tata peut alors rejoindre un salon. Les deux premiers
-utilisateurs qui rejoignent un salon sont automatiquement
-des joueurs. Ceux qui rejoignent le salon après sont
-des spectateurs et leurs messages sont ignorés.
+Le joueur tata peut alors rejoindre un salon. Il peut regarder
+qui se trouve dans les salons pour choisir son adversaire.
+Les deux premiers utilisateurs qui rejoignent un salon 
+sont automatiquement des joueurs. Ceux qui rejoignent le 
+salon après sont des spectateurs et leurs messages sont ignorés.
 
 Lorsque deux personnes au minimum entrent dans un salon
 la partie commence et le serveur envoie un broadcast
@@ -70,48 +71,38 @@ Tout message qui ne respecte pas la grammaire ou qui
 ne respecte pas les règles du jeu en cours est ignoré.
 Un client peut détecter que son message est valide 
 si le super utilisateur répond par une commande 
-`command-play-simple`.
-
-C'est alors au joueur suivant de jouer selon les mêmes
-modalités de timeout que spécifiées par la commande
-`command-task-play` initiale. Exceptionellement
-le super utilisateur peut envoier une commande
-`command-task-play` en milieu de partie lorsqu'il
-décide de changer la valeur de timeout.
+`command-task-play` comprennant le joueur suivant.
 
 Lorsqu'une partie se termine, soit par une victoire, 
 soit par une égalité, soit car un joueur a été disqualifié
 pour n'avoir pas joué à temps, le super utilisateur envoie un
-broadcast `end`.
+broadcast `end` avec optionellement la raison.
 
- `PRIVMSG #salon1 end le joueur 1 a été déconnecté`
+Exemple
+```
+PRIVMSG #salon1 end le joueur 1 a été déconnecté
+PRIVMSG #salon1 end server error
+PRIVMSG #salon1 end player 2 win
+PRIVMSG #salon1 end
+```
 
 C'est aux clients de détecter qui a gagné mais le super
 utilisateur peut également ajouter un texte explicatif.
 
-Le serveur PEUT mettre le salon en lecture seule lorsqu'une
-partie est terminée.
-
-Le serveut PEUT archiver le salon en question pour permettre
-à quiconque de revoir la partie jouée.
-
-Par souci d'économie de ressources le serveur PEUT supprimer
-le salon et l'historique des messages postés dans le salon
-lorsque la partie est terminée, après un délai ou immédiatement.
-
-Au cours de la partie le serveur PEUT broadcast dans le format
+Au cours de la partie le serveur peut broadcast dans le format
 qui lui semble le plus lisible pour les humains l'état de
 la partie en cours ou terminée, de la manière qu'il 
 veut, par exemple après chaque coup, ou bien en un seul tenant 
-à la fin de la partie.
+à la fin de la partie, d'une manière qui n'entre pas en
+conflit avec le protocole.
 
 ## Grammaire
 ```abnf
-command = command-list-games \
-          command-task-play \
-          command-play \
-          command-end \
-          answer-list-games
+command = command-list-games \  ; player -> super user
+          command-task-play \   ; super users -> broadcast
+          command-play \        ; player -> broadcast
+          command-end \         ; super user -> broadcast
+          answer-list-games     ; super user -> player
 
 
 player = ALPHA *8(ALPHA / DIGIT)
@@ -122,12 +113,9 @@ command-list-games = "list games" CRLF
 
 command-task-play = "play" SP player SP number *(number) CRLF
 
-command-play-simple = "play" CRLF
-
 answer-play = "play" SP ("1" / "2" / "3" / "4" / "5" / "6" / "7") CRLF
 
 command-end = "end" [*(ALPHA / SP)] CRLF
 
 answer-list-games = DIGIT *(DIGIT) *(SP room) CRLF
-
 ```
