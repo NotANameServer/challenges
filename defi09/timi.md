@@ -76,8 +76,8 @@ et se reconnecter dans le temps imparti
 sans que la règle précédente ne s'annule.
 
 Lorsqu'une partie se termine, soit par une victoire, 
-soit par une égalité, soit car un joueur a été pour n'avoir
-pas joué à temps, le super utilisateur envoie un
+soit par une égalité, soit car un joueur a été disqualifié
+pour n'avoir pas joué à temps, le super utilisateur envoie un
 broadcast `end`.
 
  `PRIVMSG #salon1 end`
@@ -99,3 +99,18 @@ qui lui semble le plus lisible pour les humains l'état de
 la partie en cours ou terminée, de la manière qu'il 
 veut, par exemple après chaque coup, ou bien en un seul tenant 
 à la fin de la partie.
+
+Si le protocole applicatif ne met pas en mémoire les messages 
+postés dans le passé, un super utilisateur PEUT mémoriser 
+les messages postés et implémenter une commande `replay`. 
+Par exemple si un jouer veut revoir la partie jouée dans 
+le `salon4`, il envoie une commande
+ 
+ `PRIVMSG toto replay salon4`
+
+Le super utilisateur lui répond en répétant les messages
+publics postés lors de la partie.
+
+Dans ce cas il vaut mieux que chaque salon ait un nom unique
+tant qu'une partie est gardée en mémoire pour éviter les 
+ambiguïtés.
