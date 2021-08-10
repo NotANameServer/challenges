@@ -114,3 +114,37 @@ publics postés lors de la partie.
 Dans ce cas il vaut mieux que chaque salon ait un nom unique
 tant qu'une partie est gardée en mémoire pour éviter les 
 ambiguïtés.
+
+Il implémente également dans ce cas une commande `list replay`
+à laquelle il répond de la même manière que pour `list games`
+sauf qu'il liste les salons qu'il a en mémoire au lieu de salons 
+disponibles pour jouer.
+
+## Grammaire
+```abnf
+command = command-list-games \
+          command-task-play \
+          command-play \
+          command-end \
+          command-list-replay \
+          command-replay
+
+number =  "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+
+simple_letter = %x41-5A / %x61-7A   ; A-Z , a-z, without spaces
+
+player = simple_letter *8(simple_letter / number)
+
+room = simple_letter *8(simple_letter / number)
+
+command-list-games = "list games" CRLF
+
+command-task-play = "play" SP player SP number *(number) CRLF
+
+command-end = end CRLF
+
+command-list-replay = "list replay" CRLF
+
+command-replay = "list replay" SP room CRLF
+```
+Note : les valeurs de `player` et `room` sont gardées assez simple pour concilier le maximum de protocoles applicatifs.
