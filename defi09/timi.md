@@ -44,7 +44,7 @@ PRIVMSG tata salon4
 ```
 
 Un salon disponible est un salon qui n'est pas rempli 
-(où une partie n'est pas déjà en cours)
+(où une partie n'est pas déjà en cours).
 
 Le joueur tata peut alors rejoindre un salon. Les deux premiers
 utilisateurs qui rejoignent un salon sont automatiquement
@@ -74,6 +74,12 @@ utilisateur peut soit jouer un coup aléatoire à sa place,
 soit le déclarer perdant. Un joueur peut se déconnecter
 et se reconnecter dans le temps imparti 
 sans que la règle précédente ne s'annule.
+
+Tout message qui ne respecte pas la grammaire ou qui
+ne respecte pas les règles du jeu en cours est ignoré.
+Un client peut détecter que son message est valide 
+si le super utilisateur répond par une commande `play`
+pour le joueur suivant.
 
 Lorsqu'une partie se termine, soit par une victoire, 
 soit par une égalité, soit car un joueur a été disqualifié
@@ -131,20 +137,22 @@ command = command-list-games \
 
 number =  "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
 
-simple_letter = %x41-5A / %x61-7A   ; A-Z , a-z, without spaces
+simple-letter = %x41-5A / %x61-7A   ; A-Z , a-z, without spaces
 
-player = simple_letter *8(simple_letter / number)
+player = simple-letter *8(simple-letter / number)
 
-room = simple_letter *8(simple_letter / number)
+room = simple-letter *8(simple-letter / number)
 
 command-list-games = "list games" CRLF
 
 command-task-play = "play" SP player SP number *(number) CRLF
 
-command-end = end CRLF
+command-end = "end" CRLF
 
 command-list-replay = "list replay" CRLF
 
-command-replay = "list replay" SP room CRLF
+command-replay = "replay" SP room CRLF
 ```
-Note : les valeurs de `player` et `room` sont gardées assez simple pour concilier le maximum de protocoles applicatifs.
+
+Les valeurs de `player` et `room` sont gardées assez simple pour concilier 
+le maximum de protocoles applicatifs.
