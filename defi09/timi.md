@@ -18,7 +18,7 @@ Un super utilisateur peut créer des salons à sa propre
 initiative selon la manière propre au protocole applicatif.
 
 Des utilisateurs normaux qui souhaitent jouer envoient un message
-privé à un super utilisateur.
+privé à un super utilisateur de type `command-list-games`.
 
  `list games`
  
@@ -28,20 +28,17 @@ est ainsi
 
  `PRIVMSG toto list games`
 
-Le super utilisateur répond le nombre de salons disponibles
-puis une liste séparée soit par des sauts de ligne `\r\n`, 
-soit via des messages répétés si le protocole ne permet pas de 
-saut de ligne dans les messages une liste de salons qui 
+Le super utilisateur répond un `answer-list-games` le nombre de salons disponibles
+puis une liste séparée par des espaces une liste de salons qui 
 permettent de jouer au puissance 4.
 
 Dans le cas d'IRC
 ```
-PRIVMSG tata 4
-PRIVMSG tata salon1
-PRIVMSG tata salon2
-PRIVMSG tata salon3
-PRIVMSG tata salon4
+PRIVMSG tata 4 salon1 salon2 salon3 salon4
 ```
+
+On ne rajoute pas de `#` avant les noms de salons, c'est aux
+clients de le faire.
 
 Un salon disponible est un salon qui n'est pas rempli 
 (où une partie n'est pas déjà en cours).
@@ -53,42 +50,47 @@ des spectateurs et leurs messages sont ignorés.
 
 Lorsque deux personnes au minimum entrent dans un salon
 la partie commence et le serveur envoie un broadcast
-`play` dans le salon pour dire qui joue (le premier à jouer
-peut être tiré au sort, ou être le premier à être
-entré dans le salon, ou le joueur qui arrive en premier
-dans l'ordre alphabétique...), et le temps
+`command-task-play` dans le salon pour dire qui joue 
+(le premier à jouer peut être tiré au sort, ou être le 
+premier à être entré dans le salon, ou le joueur qui 
+arrive en premier dans l'ordre alphabétique...), et le temps
 de réflexion autorisé, en secondes.
 
  `PRIVMSG #salon1 play tata 15`
  
 Le joueur tata a donc 15 secondes pour jouer un coup. Il
-joue ainsi
+joue ainsi avec une commande `answer-play`
 
  `PRIVMSG #salon1 play 4`
 
 pour jouer à la quatrième colonne. La numérotation commence
 à 1.
 
-Si le joueur n'a pas répondu dans les temps le super 
-utilisateur peut soit jouer un coup aléatoire à sa place, 
-soit le déclarer perdant. Un joueur peut se déconnecter
-et se reconnecter dans le temps imparti 
-sans que la règle précédente ne s'annule.
+Si le joueur n'a pas répondu dans les temps la partie
+se termine.
 
 Tout message qui ne respecte pas la grammaire ou qui
 ne respecte pas les règles du jeu en cours est ignoré.
 Un client peut détecter que son message est valide 
-si le super utilisateur répond par une commande `play`
-pour le joueur suivant.
+si le super utilisateur répond par une commande 
+`command-play-simple`.
+
+C'est alors au joueur suivant de jouer selon les mêmes
+modalités de timeout que spécifiées par la commande
+`command-task-play` initiale. Exceptionellement
+le super utilisateur peut envoier une commande
+`command-task-play` en milieu de partie lorsqu'il
+décide de changer la valeur de timeout.
 
 Lorsqu'une partie se termine, soit par une victoire, 
 soit par une égalité, soit car un joueur a été disqualifié
 pour n'avoir pas joué à temps, le super utilisateur envoie un
 broadcast `end`.
 
- `PRIVMSG #salon1 end`
+ `PRIVMSG #salon1 end le joueur 1 a été déconnecté`
 
-C'est aux clients de détecter qui a gagné.
+C'est aux clients de détecter qui a gagné mais le super
+utilisateur peut également ajouter un texte explicatif.
 
 Le serveur PEUT mettre le salon en lecture seule lorsqu'une
 partie est terminée.
@@ -123,8 +125,8 @@ ambiguïtés.
 
 Il implémente également dans ce cas une commande `list replay`
 à laquelle il répond de la même manière que pour `list games`
-sauf qu'il liste les salons qu'il a en mémoire au lieu de salons 
-disponibles pour jouer.
+un `answer-list-games` sauf qu'il liste les salons qu'il a en 
+mémoire au lieu de salons disponibles pour jouer.
 
 ## Grammaire
 ```abnf
@@ -133,26 +135,35 @@ command = command-list-games \
           command-play \
           command-end \
           command-list-replay \
-          command-replay
+          command-replay \
+          answer-list-games
 
-number =  "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
 
-simple-letter = %x41-5A / %x61-7A   ; A-Z , a-z, without spaces
+player = ALPHA *8(ALPHA / DIGIT)
 
-player = simple-letter *8(simple-letter / number)
-
-room = simple-letter *8(simple-letter / number)
+room = ALPHA *8(ALPHA / DIGIT)
 
 command-list-games = "list games" CRLF
 
 command-task-play = "play" SP player SP number *(number) CRLF
 
-command-end = "end" CRLF
+command-play-simple = "play" CRLF
+
+answer-play = "play" SP number *(number) CRLF
+
+command-end = "end" [*(ALPHA / SP)] CRLF
 
 command-list-replay = "list replay" CRLF
 
 command-replay = "replay" SP room CRLF
+
+answer-list-games = DIGIT *(DIGIT) *(SP room) CRLF
+
 ```
 
 Les valeurs de `player` et `room` sont gardées assez simple pour concilier 
 le maximum de protocoles applicatifs.
+
+Le super joueur peut afficher de manière optionelle de manière informative 
+un texte avec la commande `end` pour dire qui a gagné ou signaler un timeout. 
+Ces informations peuvent également être déduites par la succession de messages.
