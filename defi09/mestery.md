@@ -57,9 +57,10 @@ message-quit = "6" CRLF
 
 ### Timeouts
 *Ces valeurs (par défauts) peuvent varier en fonction de la configuration du serveur.*
-
+```py
 timeout = 3s
 choice_timeout = 10s
+```
 
 ## Client
 
@@ -68,7 +69,7 @@ Lorsque le client doit se connecter pour n'importe quelle raison, il doit envoye
 ### Connexion
 Pour se connecter au serveur, le client doit envoyer un `message-connect` suivi du *pseudo* contenant seulement des caractères alphanumériques (`[A-Za-z0-9_-]`), entre 1 et 16 caractères inclus.
 
-Si la connexion a réussi, le client reçoit un `message-init` avec la largeur et longueur du jeu.
+Si la connexion a réussi, le client reçoit un `message-init` avec la largeur et hauteur du jeu.
 
 ### Partie
 Lorsque le serveur trouve un adversaire, le client reçoit alors un `message-game-start` :
@@ -79,6 +80,8 @@ Le client 0 a alors `timeout + 1` secondes pour jouer. Le client 1 doit répondr
 Pour jouer un coup, le client doit envoyer un `message-play-move`, avec le numéro de la colonne où il souhaite déposer son pion, le numéro doit être valide (c'est-à-dire que la colonne doit existé et ne doit pas être plaine), entre `0` et `width` non inclus.
 
 Si la colonne est invalide, le client reçoit une erreur `ERR_INVALID_COLUMN`, il a 1 seconde pour renvoyer un coup. Si le coup est encore invalide, le client est déconnecté du serveur, avec la même erreur, et l'adversaire remporte la partie.
+
+Lorsque l'adversaire joue un coup (valide), le client reçoit également un `message-play-move` avec la colonne jouée par l'adversaire.
 
 #### Fin de partie
 Lorsqu'une personne gagne, lorsque la partie nulle, ou bien lorsqu'un des clients se déconnecte, la fin de la partie est annoncé via un `message-game-end` suivi de l'indice (0 ou 1) du joueur gagnant, ou rien s'il y a partie nulle.
