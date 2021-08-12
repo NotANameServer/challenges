@@ -1,0 +1,14 @@
+{
+  "name": "automaton",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "@types/dom-mediacapture-record": "^1.0.7",
+    "typescript": "^4.2.3",
+    "vite": "^2.1.5"
+  }
+}

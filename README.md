@@ -27,6 +27,35 @@ gourous que les débutants. En ce sens, ces défis ne sont pas une compétition,
 ni entre membres, ni entre langages (modulo troll :smile:). Le seul prix à
 gagner est de passer du bon temps et d’apprendre des nouvelles choses.
 
+## Soumettre sa participation
+
+Pour soumettre votre participation, nous vous invitons à faire une PR
+avec votre projet (soumission) dans `defiXX/<langage>/<pseudo>`,
+`<pseudo>` peut être un dossier ou un fichier.
+
+Si vous le souhaitez, vous pouvez utiliser un [sous-module Git](https://git-scm.com/docs/git-submodule),
+pointant vers votre repo au lieu de directement inclure votre soumission,
+dans ce cas, vous devez l'ajouter de cette façon :
+
+```sh
+# clonez votre fork (si ce n'est pas déjà fait)
+$ git clone https://github.com/<pseudo>/challenges
+$ cd challenges
+
+# créez une branche à partir de master
+$ git checkout -b <nom de la branche> master
+
+# ajoutez votre sous-module (repo)
+$ git submodule add <lien du repo git> defiXX/<langage>/<pseudo>
+
+# commitez et poussez les changements
+$ git commit -am "..."
+$ git push origin <nom de la branche>
+```
+
+Toutefois, pour faciliter la tâche des correcteurs,
+nous vous recommandons de ne pas utiliser de sous-module.
+
 ## Les ambassadeurs et assistants
 
 Tous les langages ne sont pas encore représentés, n'hésitez pas à soumettre
@@ -35,11 +64,11 @@ votre candidature pour devenir ambassadeur et rejoindre l'aventure !
 | Langages | Correcteurs |
 | -------- | ----------- |
 | asm | *personne* |
-| c | gbdivers#9340 |
-| cpp | gbdivers#9340 |
+| c | *personne* |
+| cpp | *personne* |
 | csharp | Kaktus#0006 |
-| html-css | *personne* |
-| java | florent#8092 |
+| html-css | Mishaa#3333 |
+| java | florent#8092 et Il_totore#9133 |
 | javascript-typescript | Romain Lanz#0042 et Mestery#3859 |
 | lua | *personne* |
 | php | Mjöllnir#3515 et Cara#0385 |
@@ -49,6 +78,11 @@ votre candidature pour devenir ambassadeur et rejoindre l'aventure !
 ## La liste des défis
 
 1. [Algorithme de tri](defi01)
-2. [Génération de Labyrinthe](defi02)
-3. [Résolution de Labyrinthe](defi03)
+2. [Génération de labyrinthe](defi02)
+3. [Résolution de labyrinthe](defi03)
 4. [Implémentation d'un serveur HTTP](defi04)
+5. [Automates cellulaires](defi05)
+6. [Client IRC](defi06)
+7. [Calculatrice](defi07)
+8. [Puissance 4](defi08)
+8. [Puissance 4 - Protocole](defi09)

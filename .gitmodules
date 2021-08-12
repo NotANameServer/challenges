@@ -7,9 +7,39 @@
 [submodule "defi02/java/Syrows"]
 	path = defi02/java/Syrows
 	url = https://gitlab.com/Syr0ws/mazegenerator.git
-[submodule "defi04/java/httpServer"]
-	path = defi04/java/httpServer
-	url = https://github.com/florentm35/httpServer
 [submodule "defi04/java/florent"]
 	path = defi04/java/florent
 	url = https://github.com/florentm35/httpServer
+[submodule "defi04/crystal/superkooka"]
+	path = defi04/crystal/superkooka
+	url = https://git.superkooka.com/Superkooka/WebCrystal
+[submodule "defi05/java/florent"]
+	path = defi05/java/florent
+	url = https://github.com/florentm35/game-of-lide
+[submodule "defi05/cpp/tutosfaciles48"]
+	path = defi05/cpp/tutosfaciles48
+	url = https://github.com/tutosfaciles48/TotalisticNumber
+[submodule "defi05/python/avanini"]
+	path = defi05/python/avanini
+	url = https://gitlab.com/fblanchet/defi-nan
+[submodule "defi05/python/MTrezzy"]
+	path = defi05/python/MTrezzy
+	url = https://github.com/MTrezzy/Jeu-de-la-vie_virus
+[submodule "defi06/java/florent"]
+	path = defi06/java/florent
+	url = https://github.com/florentm35/client-irc.git
+[submodule "defi07/java/florent"]
+	path = defi07/java/florent
+	url = https://github.com/florentm35/calculatrice.git
+[submodule "defi08/java/florent"]
+	path = defi08/java/florent
+	url = https://github.com/florentm35/puissance4.git
+[submodule "defi08/rust/citorva"]
+	path = defi08/rust/citorva
+	url = https://github.com/citorva/connect_four
+[submodule "defi08/c/Meithal"]
+	path = defi08/c/Meithal
+	url = https://gitlab.com/Meithal/puissance4.git
+[submodule "defi08/haskell/sofiane"]
+	path = defi08/haskell/sofiane
+	url = https://github.com/Kugge/Haskell-Connect4

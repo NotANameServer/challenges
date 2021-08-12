@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Automaton - 1</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html, body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      main {
+        display: flex;
+        flex-flow: column;
+        height: 100%;
+      }
+
+      #controls {
+        color: white;
+        background-color: #2A2B2E;
+        padding: 1em;
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+      }
+
+      canvas {
+        flex: 1 1 auto;
+        image-rendering: pixelated;
+      }
+    </style>
+
+    <script type="module" src="./level1.ts" defer></script>
+  </head>
+  <body>
+    <main>
+      <div id="controls">
+        <button id="stst">Start</button>
+
+        <button id="reset">Reset</button>
+  
+        <input type="number" value="9" placeholder="Length" id="length">
+
+        <input type="number" value="250" placeholder="Speed (ms)" id="speed">
+  
+        <div>
+          <input type="checkbox" id="record">
+          <label for="record">Record</label>
+        </div>
+  
+        <a id="download" hidden>Download record</a>
+      </div>
+      <canvas moz-opaque></canvas>
+    </main>
+  </body>
+</html>

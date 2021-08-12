@@ -1,4 +1,4 @@
-# Défi 2 - Génération de Labyrinthe
+# Défi 2 - Génération de labyrinthe
 
 Défi sur un weekend, à rendre pour le dimanche 28 février à 18h au plus tard à votre ambassadeur préféré. Le live se déroulera le sur-lendemain, mardi soir à 20h00.
 
