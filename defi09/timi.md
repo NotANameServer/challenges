@@ -15,33 +15,13 @@ Le protocole nécessite un environnement qui gère des
 utilisateurs, des privilèges utilisateur et des salons.
 
 Un super utilisateur peut créer des salons à sa propre
-initiative selon la manière propre au protocole applicatif.
+initiative selon la manière propre à l'environnement.
 
-Des utilisateurs normaux qui souhaitent jouer envoient un message
-privé à un super utilisateur de type `command-list-games`.
+Des utilisateurs normaux qui souhaitent jouer peuvent découvrir
+les salons disponibles selon une manière propre à chaque environnement.
 
- `list games`
- 
-Par exemple dans un environnement IRC, si le super 
-utilisateur s'appele toto et le joueur tata, le message
-est ainsi
-
- `PRIVMSG toto list games`
-
-Le super utilisateur répond un `answer-list-games` le nombre de salons disponibles
-puis une liste séparée par des espaces une liste de salons qui 
-permettent de jouer au puissance 4.
-
-Dans le cas d'IRC
-```
-PRIVMSG tata 4 salon1 salon2 salon3 salon4
-```
-
-Un salon disponible est un salon qui n'est pas rempli 
-(où une partie n'est pas déjà en cours).
-
-Le joueur tata peut alors rejoindre un salon. Il peut regarder
-qui se trouve dans les salons pour choisir son adversaire.
+Ils peuvent regarder qui se trouve dans les salons pour 
+choisir leur adversaires.
 Les deux premiers utilisateurs qui rejoignent un salon 
 sont automatiquement des joueurs. Ceux qui rejoignent le 
 salon après sont des spectateurs et leurs messages sont ignorés.
@@ -98,24 +78,18 @@ conflit avec le protocole.
 
 ## Grammaire
 ```abnf
-command = command-list-games \  ; player -> super user
-          command-task-play \   ; super users -> broadcast
+command = command-task-play \   ; super users -> broadcast
           command-play \        ; player -> broadcast
           command-end \         ; super user -> broadcast
-          answer-list-games     ; super user -> player
 
 
 player = ALPHA *8(ALPHA / DIGIT)
 
 room = ALPHA *8(ALPHA / DIGIT)
 
-command-list-games = "list games" CRLF
-
 command-task-play = "play" SP player SP number *(number) CRLF
 
 answer-play = "play" SP ("1" / "2" / "3" / "4" / "5" / "6" / "7") CRLF
 
 command-end = "end" [*(ALPHA / SP)] CRLF
-
-answer-list-games = DIGIT *(DIGIT) *(SP room) CRLF
 ```
