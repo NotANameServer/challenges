@@ -42,8 +42,9 @@ premier à être entré dans le salon, ou le joueur qui
 arrive en premier dans l'ordre alphabétique...), le temps
 de réflexion autorisé, en secondes, ainsi que le dernier
 coup joué; comme aucun coup n'a encore été joué, il met 0 ici.
+Imaginon une partie où toto et tata s'affrontent.
 
- `PRIVMSG #salon1 play tata 15 0`
+ `PRIVMSG #salon1 play toto 15 0`
  
 Le joueur tata a donc 15 secondes pour jouer un coup. Il
 joue ainsi avec une commande `answer-play`
@@ -64,7 +65,7 @@ si l'arbitre répond par une commande
 `command-task-play` comprennant le joueur suivant et
 la colonne où il a joué.
 
- `PRIVMSG #salon1 play titi 15 4`
+ `PRIVMSG #salon1 play tata 15 4`
 
 La commande `command-task-play` comprend la dernière
 colonne jouée au cas où un des jouers cherche à "flood"
