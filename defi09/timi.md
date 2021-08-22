@@ -8,7 +8,8 @@ la notion de salon, de message broadcast, de message privé
 et de privilège utilisateur. On peut citer IRC, discord...
 
 Il utile des messages publics (par exemple PRIVMSG), 
-sans nécessiter de modifier les protocoles en question.
+sans nécessiter de modifier les protocoles sous-jacent
+en question.
 
 ## Vocabulaire
 * Arbitre: utilisateur qui a le pouvoir de créer des canaux
