@@ -46,7 +46,7 @@ Imaginon une partie où toto et tata s'affrontent.
 
  `PRIVMSG #salon1 play toto 15 0`
  
-Le joueur tata a donc 15 secondes pour jouer un coup. Il
+Le joueur toto a donc 15 secondes pour jouer un coup. Il
 joue ainsi avec une commande `answer-play`
 
  `PRIVMSG #salon1 play 4`
