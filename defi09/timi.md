@@ -63,8 +63,7 @@ celui qui l'envoie. Par exemple si la 4ème colonne est
 remplie et que tata envoye une commande `play 4`, l'arbitre
 envoye une réponse `end tata a fait un coup illégal.`
 
-Un client peut détecter que son message est valide 
-si l'arbitre répond par une commande 
+Une fois un coup joué l'arbitre répond par une commande 
 `command-task-play` comprennant le joueur suivant.
 
  `play tata 15`
