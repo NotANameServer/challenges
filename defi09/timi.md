@@ -7,13 +7,13 @@ Il peut s'implémenter avec toute application qui implémente
 la notion de salon, de message broadcast, de message privé
 et de privilège utilisateur. On peut citer IRC, discord...
 
-Il utile des messages publics (par exemple PRIVMSG), 
+Il utilise des messages publics (par exemple PRIVMSG), 
 sans nécessiter de modifier les protocoles sous-jacent
 en question.
 
 ## Vocabulaire
 * Arbitre: utilisateur qui a le pouvoir de créer des canaux
-et qui gère les parties
+et qui gère les parties.
 
 ## Fonctionnement
 Le protocole nécessite un environnement qui gère des
@@ -35,21 +35,20 @@ sont automatiquement des joueurs. Ceux qui rejoignent le
 salon après sont des spectateurs et leurs messages sont ignorés.
 
 Lorsque deux personnes au minimum entrent dans un salon
-la partie commence et le'arbitre envoie un broadcast
+la partie commence et l'arbitre envoie un broadcast
 `command-task-play` dans le salon pour dire qui joue 
 (le premier à jouer peut être tiré au sort, ou être le 
 premier à être entré dans le salon, ou le joueur qui 
 arrive en premier dans l'ordre alphabétique...), le temps
-de réflexion autorisé, en secondes, ainsi que le dernier
-coup joué; comme aucun coup n'a encore été joué, il met 0 ici.
-Imaginon une partie où toto et tata s'affrontent.
+de réflexion autorisé, en secondes.
+Imaginons une partie où toto et tata s'affrontent.
 
- `PRIVMSG #salon1 play toto 15 0`
+ `play toto 15`
  
 Le joueur toto a donc 15 secondes pour jouer un coup. Il
 joue ainsi avec une commande `answer-play`
 
- `PRIVMSG #salon1 play 4`
+ `play 4`
 
 pour jouer à la quatrième colonne. La numérotation commence
 à 1, en suivant l'ordre ou le damier est représenté en mémoire,
@@ -59,19 +58,22 @@ Si le joueur n'a pas répondu dans les temps la partie
 se termine.
 
 Tout message qui ne respecte pas la grammaire ou qui
-ne respecte pas les règles du jeu en cours est ignoré.
+ne respecte pas les règles du jeu en cours disqualifie
+celui qui l'envoie. Par exemple si la 4ème colonne est 
+remplie et que tata envoye une commande `play 4`, l'arbitre
+envoye une réponse `end tata a fait un coup illégal.`
+
 Un client peut détecter que son message est valide 
 si l'arbitre répond par une commande 
-`command-task-play` comprennant le joueur suivant et
-la colonne où il a joué.
+`command-task-play` comprennant le joueur suivant.
 
- `PRIVMSG #salon1 play tata 15 4`
+ `play tata 15`
 
-La commande `command-task-play` comprend la dernière
-colonne jouée au cas où un des jouers cherche à "flood"
-le canal de commandes `answer-play`, de sorte que l'autre
-joueur ne sait pas quelle est la bonne, celle qui a été
-enregistrée par l'arbitre.
+Donner plus d'un seul coup valide avant la réponse de l'arbitre
+disqualifie celui qui le fait, en effet "flood" le channel de 
+messages `command-play` rend ambigu quel est bien le coup
+enregistré par l'arbitre. Dans ce cas l'arbitre peut envoyer un
+message `end toto a essayé de flood.`
 
 Lorsqu'une partie se termine, soit par une victoire, 
 soit par une égalité, soit car un joueur a été disqualifié
@@ -80,10 +82,10 @@ broadcast `end` avec optionellement la raison.
 
 Exemple
 ```
-PRIVMSG #salon1 end le joueur 1 a été déconnecté
-PRIVMSG #salon1 end server error
-PRIVMSG #salon1 end player 2 win
-PRIVMSG #salon1 end
+end le joueur 1 a été déconnecté
+end server error
+end player 2 win
+end
 ```
 
 C'est aux clients de détecter qui a gagné mais l'arbitre
@@ -106,15 +108,13 @@ command = command-task-play \   ; super users -> broadcast
           command-end \         ; super user -> broadcast
 
 
-player = ALPHA *8(ALPHA / DIGIT)
-
-room = ALPHA *8(ALPHA / DIGIT)
+player = <implementation defined> ; can be ALPHA *8(ALPHA / DIGIT)
 
 column = ("1" / "2" / "3" / "4" / "5" / "6" / "7")
 
-command-task-play = "play" SP player SP DIGIT *(DIGIT) SP column CRLF
+command-task-play = "play" SP player SP DIGIT *(DIGIT) CRLF
 
 answer-play = "play" SP column CRLF
 
-command-end = "end" [*(ALPHA / SP)] CRLF
+command-end = "end" [*(ALPHA / /DIGIT / SP)] CRLF
 ```
