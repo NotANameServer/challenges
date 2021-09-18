@@ -1,4 +1,4 @@
-## Défi 9 - Puissance 4 - Protocole
+# Défi 9 - Puissance 4 - Protocole
 
 Défi sur un weekend, à rendre pour le lundi 9 août. Le live se déroulera le mardi 10 août à 20h00.
 
