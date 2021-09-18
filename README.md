@@ -78,9 +78,11 @@ votre candidature pour devenir ambassadeur et rejoindre l'aventure !
 ## La liste des défis
 
 1. [Algorithme de tri](defi01)
-2. [Génération de Labyrinthe](defi02)
-3. [Résolution de Labyrinthe](defi03)
+2. [Génération de labyrinthe](defi02)
+3. [Résolution de labyrinthe](defi03)
 4. [Implémentation d'un serveur HTTP](defi04)
 5. [Automates cellulaires](defi05)
 6. [Client IRC](defi06)
 7. [Calculatrice](defi07)
+8. [Puissance 4](defi08)
+8. [Puissance 4 - Protocole](defi09)
