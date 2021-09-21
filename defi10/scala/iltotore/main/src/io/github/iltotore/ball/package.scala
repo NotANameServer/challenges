@@ -26,7 +26,10 @@ package object ball extends TypeOps with MiscOps {
   given Ticker[Ball] with {
 
     override def tick(entity: Ball): Ball = {
-      entity.copy(position = entity.position + entity.velocity)
+      entity.copy(
+        position = entity.position + entity.velocity, //Application de la vélocité
+        velocity = entity.velocity - Vec(0, 0.5) //Gravité
+      )
     }
   }
 
