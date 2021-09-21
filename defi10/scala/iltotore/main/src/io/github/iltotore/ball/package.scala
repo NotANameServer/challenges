@@ -3,14 +3,14 @@ package io.github.iltotore
 import doodle.core.*
 import doodle.image.Image
 
-package object ball extends TypeOps with MiscOps with MathOps {
+package object ball extends TypeOps with MiscOps {
 
   given ToImage[Ball] with {
 
     override def toImage(entity: Ball): Image =
       Image
         .circle(entity.radius*2)
-        .fillColor(Color.red)
+        .fillColor(entity.color)
         .at(entity.position)
   }
 

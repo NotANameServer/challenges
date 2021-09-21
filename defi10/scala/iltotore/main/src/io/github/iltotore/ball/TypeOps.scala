@@ -3,6 +3,9 @@ package io.github.iltotore.ball
 import doodle.core.BoundingBox
 import doodle.image.Image
 
+/**
+ * Infix ops for Ticker, ToImage et Ticker
+ */
 trait TypeOps {
 
   extension[A] (entity: A)(using toImg: ToImage[A]) {
