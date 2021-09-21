@@ -50,4 +50,4 @@ Voici le calcul du choc élastique entre deux objets en mouvement (version utili
 
 La Gravité est une simple décrémentation de la valeur Y du vecteur vélocité.
 
-Vous pouvez changer le vecteur vélocité dans [l'instance Ticker\[Ball\]](https://github.com/NotANameServer/challenges/blob/master/interact/defi10/scala/iltotore/main/src/io/github/iltotore/ball/Ball#L31) 
+Vous pouvez changer le vecteur vélocité dans [l'instance Ticker\[Ball\]](https://github.com/NotANameServer/challenges/blob/master/defi10/scala/iltotore/main/src/io/github/iltotore/ball/package.scala#L31) 
