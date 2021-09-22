@@ -1,6 +1,8 @@
 
 # Boules 2D
 
+![](demo.gif)
+
 
 ## Description
 
@@ -26,9 +28,13 @@
 
 - animer la scène d'une durée T (avec détection de collisions a priori) : 
 
-    - trouver l'intersection qui arrive le plus tôt (à la durée Ti)
+    - trouver l'intersection qui arrive au plus tôt (à la durée Ti)
     - calculer le rebond et déplacer tous les objets d'une durée Ti
     - recommencer jusqu'à arriver à la durée T
 
 - calcul de collision entre deux boules : <https://www.f-legrand.fr/scidoc/docmml/sciphys/meca/collidisques/collidisques.html>
+
+## Implémentation
+
+Haskell + les libs : gloss, lens, linear, vector
 
