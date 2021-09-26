@@ -8,7 +8,7 @@ import doodle.core.Vec
  * @param velocity the velocity of the colliding object
  * @param mass the mass of the colliding object
  */
-case class Collision(vector: Vec, velocity: Vec, mass: Double)
+case class Collision(vector: Vec, velocity: Vec, mass: Double, minDistance: Double)
 
 object Collision {
 
@@ -18,5 +18,5 @@ object Collision {
    * @param mass the mass of the colliding object (999 by default)
    * @return the resulting Collision object
    */
-  def fixed(vector: Vec, mass: Double = 999): Collision = Collision(vector, Vec.zero, mass)
+  def fixed(vector: Vec, minDistance: Double, mass: Double = 999): Collision = Collision(vector, Vec.zero, mass, minDistance)
 }
