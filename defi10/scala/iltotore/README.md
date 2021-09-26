@@ -1,5 +1,8 @@
 # Balles rebondissantes en Scala
 
+![No Gravity](ball_no_gravity.gif)
+*Note: la faible fréquence d'image ne vient pas du jeu mais du matériel utilisé pour l'enregistrement du gif*
+
 Voici un exemple du défi n°10 écrit en Scala.
 
 Le code est entièrement documenté via une Scaladoc en anglais (voir le code).
@@ -47,6 +50,8 @@ Voici le calcul du choc élastique entre deux objets en mouvement (version utili
 ![Choc Élastique](elastic_collision.svg)
 
 ## Gravité
+
+![Gravity](ball_gravity.gif)
 
 La Gravité est une simple décrémentation de la valeur Y du vecteur vélocité.
 
