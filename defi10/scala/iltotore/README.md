@@ -1,6 +1,7 @@
 # Balles rebondissantes en Scala
 
 ![No Gravity](ball_no_gravity.gif)
+
 *Note: la faible fréquence d'image ne vient pas du jeu mais du matériel utilisé pour l'enregistrement du gif*
 
 Voici un exemple du défi n°10 écrit en Scala.
