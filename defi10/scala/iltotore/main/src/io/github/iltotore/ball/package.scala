@@ -38,7 +38,7 @@ package object ball extends TypeOps with MiscOps {
     def collideWithEntities(ball: Ball, others: Iterable[Ball]): Ball =
       others.find(b => b != ball && (b.position - ball.position).length <= b.radius + ball.radius) match {
 
-        case Some(other) => ball.collide(Collision(ball.position - other.position, other.velocity, other.mass))
+        case Some(other) => ball.collide(Collision(ball.position - other.position, other.velocity, other.mass, ball.radius + other.radius))
 
         case None => ball
       }
@@ -48,10 +48,18 @@ package object ball extends TypeOps with MiscOps {
         balls = entity
           .balls
           .map(collideWithEntities(_, entity.balls))
-          .mapIf(b => b.position.x-b.radius <= entity.zone.left)(b => b.collide(Collision.fixed(Vec.unitX * -b.radius)))
-          .mapIf(b => b.position.x+b.radius >= entity.zone.right)(b => b.collide(Collision.fixed(Vec.unitX * b.radius)))
-          .mapIf(b => b.position.y-b.radius <= entity.zone.bottom)(b => b.collide(Collision.fixed(Vec.unitY * -b.radius)))
-          .mapIf(b => b.position.y+b.radius >= entity.zone.top)(b => b.collide(Collision.fixed(Vec.unitY * b.radius)))
+          .mapIf(b => b.position.x-b.radius <= entity.zone.left)(b =>
+            b.collide(Collision.fixed(Vec.unitX * (b.position.x-entity.zone.left), b.radius))
+          )
+          .mapIf(b => b.position.x+b.radius >= entity.zone.right)(b =>
+            b.collide(Collision.fixed(Vec.unitX * (b.position.x-entity.zone.right), b.radius))
+          )
+          .mapIf(b => b.position.y-b.radius <= entity.zone.bottom)(b =>
+            b.collide(Collision.fixed(Vec.unitY * (b.position.y-entity.zone.bottom), b.radius))
+          )
+          .mapIf(b => b.position.y+b.radius >= entity.zone.top)(b =>
+            b.collide(Collision.fixed(Vec.unitY * (b.position.y-entity.zone.top), b.radius))
+          )
           .map(_.tick)
       )
     }
@@ -63,7 +71,9 @@ package object ball extends TypeOps with MiscOps {
       val massCoef = (2 * collision.mass / (entity.mass + collision.mass))
       val velocityCoef = ((entity.velocity - collision.velocity).dot(collision.vector)) / Math.pow((collision.vector).length, 2)
       val bounce = entity.velocity - (collision.vector * massCoef * velocityCoef)
-      entity.copy(position = entity.position + bounce, velocity = bounce)
+      val distance = collision.minDistance - collision.vector.length
+      val movement = collision.vector*(distance/collision.vector.length)
+      entity.copy(position = entity.position + movement, velocity = bounce)
     }
 
   }
