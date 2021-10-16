@@ -14,8 +14,8 @@ mkPropose = do
               | otherwise  =  0
     return cmp
 
-trouver :: Int -> (Int -> Int) -> IO ()
-trouver n0 propose = 
+trouver :: (Int -> Int) -> IO ()
+trouver propose = 
     let go 0 _ = putStrLn "perdu"
         go n (a, b) = do
             let m = (b+a) `div` 2
@@ -23,8 +23,8 @@ trouver n0 propose =
                 -1 -> putStrLn (show m ++ ": trop grand") >> go (n-1) (a,m)
                 1  -> putStrLn (show m ++ ": trop petit") >> go (n-1) (m,b)
                 _  -> putStrLn (show m ++ ": trouvé") 
-    in go n0 range
+    in go nTries range
 
 main :: IO ()
-main = mkPropose >>= trouver nTries
+main = mkPropose >>= trouver
 
