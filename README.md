@@ -85,4 +85,5 @@ votre candidature pour devenir ambassadeur et rejoindre l'aventure !
 6. [Client IRC](defi06)
 7. [Calculatrice](defi07)
 8. [Puissance 4](defi08)
-8. [Puissance 4 - Protocole](defi09)
+9. [Puissance 4 - Protocole](defi09)
+10. [Jeu de boules](defi10)
