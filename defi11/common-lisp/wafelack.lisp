@@ -28,6 +28,9 @@
          (guess guess hr (1+ counter)))))))
 
 
-(let ((guessed (guess +guess-min+ +guess-max+ 1)))
-  (when guessed
-    (format T "Number found in ~a tries." guessed)))
+(defun trouver ()
+  (let ((guessed (guess +guess-min+ (1+ +guess-max+) 1)))
+    (when guessed
+      (format T "Number found in ~a tries." guessed))))
+
+(trouver)
