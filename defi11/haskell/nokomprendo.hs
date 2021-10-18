@@ -19,10 +19,9 @@ trouver propose =
     let go 0 _ = putStrLn "perdu"
         go n (a, b) = do
             let m = (b+a) `div` 2
-                m' = if m == a then a+1 else m
             case propose m of
-                -1 -> putStrLn (show m ++ ": trop grand") >> go (n-1) (a, m)
-                1  -> putStrLn (show m ++ ": trop petit") >> go (n-1) (m', b)
+                -1 -> putStrLn (show m ++ ": trop grand") >> go (n-1) (a, m - 1)
+                1  -> putStrLn (show m ++ ": trop petit") >> go (n-1) (m + 1, b)
                 _  -> putStrLn (show m ++ ": trouvé") 
     in go nTries range
 
