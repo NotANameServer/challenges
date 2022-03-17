@@ -87,3 +87,4 @@ votre candidature pour devenir ambassadeur et rejoindre l'aventure !
 8. [Puissance 4](defi08)
 9. [Puissance 4 - Protocole](defi09)
 10. [Jeu de boules](defi10)
+11. [Le juste prix](defi11)
