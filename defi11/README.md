@@ -1,4 +1,4 @@
-**[11] Le juste prix**
+# Défi 11 - Le juste prix
 
 Défi sur un weekend, à rendre pour le mardi 19 octobre à 6h du matin au plus tard à votre ambassadeur préféré. Le live se déroulera mardi à 20h00.
 
@@ -12,7 +12,7 @@ Exemple avec les joueurs Willy et Serge :
     Serge propose 10, Willy lui répond « trop petit ».
     Serge propose 12, Willy lui répond « trouvé ».
     La partie est finie, Serge a trouvé le nombre secret en 4 coups.
--
+
 L’objectif de ce défi n’est pas de faire jouer des joueurs humains entre eux, il n’est pas non plus de faire jouer l’humain contre l’ordinateur mais bien de faire jouer l’ordinateur contre lui-même.
 
 Vous devez écrire un programme où l’ordinateur va choisir un nombre secret aléatoire entre 1 et 1 000 000 inclus, qui ne changera pas au cours de la partie et qui n’est connu que d’une fonction : propose(nombre) (que vous devez aussi écrire) dont la spécification est la suivante :
@@ -21,4 +21,4 @@ Vous devez écrire un programme où l’ordinateur va choisir un nombre secret a
     Si le nombre secret est plus grand que la proposition, la fonction retourne 1
     Si le nombre secret et la proposition sont égaux, la fonction retourne 0
 
-En n’utilisant que la fonction propose(nombre), vous écrivez une fonction trouver() où l’ordinateur doit réussir à retrouver le nombre secret. Attention, l’ordinateur n’a droit qu’à un maximum de 50 tentatives ! 
+En n’utilisant que la fonction propose(nombre), vous écrivez une fonction trouver() où l’ordinateur doit réussir à retrouver le nombre secret. Attention, l’ordinateur n’a droit qu’à un maximum de 50 tentatives !
