@@ -43,3 +43,6 @@
 [submodule "defi08/haskell/sofiane"]
 	path = defi08/haskell/sofiane
 	url = https://github.com/Kugge/Haskell-Connect4
+[submodule "defi12/python/drlazor"]
+	path = defi12/python/drlazor
+	url = https://github.com/Julien00859/sudoku.git
