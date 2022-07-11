@@ -28,9 +28,9 @@ def resoudre(S,caseContrainte):
         l = i // 9 #numéro de ligne de 0 à 8
         c = i % 9 #numéro de colonne de 0 à 8 
         if not caseContrainte[i]:
-            '''on essaye le chiffre suivant si on est à 0 c'est qu'on a essayé
+            '''on essaye le chiffre suivant, si on est à 0, c'est qu'on a essayé
             les 9 chiffres pour la i-ème case de la grille 
-            (c'est à dire ligne l+1 et colonne c + 1
+            (c'est à dire ligne l+1 et colonne c + 1)
             '''
             S[l][c] = (S[l][c] + 1)%10 
         if S[l][c] != 0 and carreOk(S,l,c) and colonneOk(S,l,c) and ligneOk(S,l,c):
@@ -61,7 +61,7 @@ with open('sudoku.txt') as file:
         #assert(len(caseContrainte)==81)
         t1 =time.time()
         resoudre(S,caseContrainte)
-        print(time.time()-t1)#temps varie de 3 millième à 6 secondes
+        print(time.time()-t1)#temps varie de 3 millièmes à 6 secondes
         
 
 
