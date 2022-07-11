@@ -1,0 +1,48 @@
+On écrit ici le triplet (n,l,c) pour dire "il y a un n sur la l-ième ligne et la c-ième colonne"
+Et on écrit son "opposé" NON(n,l,c) pour dire "il n'y a pas de n sur la l-ième ligne et la c-ième colonne"
+Ces deux triplets sont appelés des "litteraux" le premier est un littéral positif, le deuxième un litteral négatif.
+
+Une clause consiste en 0 ou plusieurs littéraux séparés par des OU (inclusifs), par exemple
+NON(1,3,2) OU (3,1,2) OU NON(2,2,3)
+
+Et un énoncé SAT consiste en 0 ou plusieurs clauses séparés par des ET, par exemple
+((1,2,3) OU (4,2,4)) ET (NON(1,2,4))
+
+Pour modéliser la grille suivante sous la forme d'un énoncé SAT
+
+1  3
+ 3 4
+4132
+3 
+On donne une clause de 1 littéral par chiffre déjà placé : 
+((1,1,1)) ET ((3,1,3)) ET (3,2,2)) ET ((4,2,4))...ET ((3,4,1))
+
+En suite comme on ne peut pas dire de façon courte "chaque chiffre et présent une seule fois par ligne, colonne, carré" 
+on va se débrouiller autrement : 
+
+comme chaque chiffre et présent au moins une fois par ligne, on a pour chaque chiffre n de 1 à 4
+  ((n,1,1) OU (n,1,2) OU (n,1,3) OU (n,1,4))
+ ET ((n,2,1) OU (n,2,2) OU (n,2,3) OU (n,2,4))
+ ET ((n,3,1) OU (n,3,2) OU (1,3,3) OU (n,3,4))
+ ET ((n,4,1) OU (n,4,2) OU (n,4,3) OU (n,4,4))
+ 
+ de même comme chaque chiffre n est présent au mois une fois par colonne, on ajoute pour chaque n 
+ ((n,1,1) OU (n,2,1) OU (n,3,1) OU (n,4,1))
+ ET (n,1,2) OU (n,2,2) OU (n,3,2) OU (n,4,2))
+ ET (n,1,3) OU (n,2,3) OU (n,3,3) OU (n,4,3))
+ ET (n,1,4) OU (n,2,4) OU (n,3,4) OU (n,4,4))
+ 
+ de plus comme chaque chiffre n est également présent au moins une fois par carré de 4, on a :
+ ((n,1,1) OU (n,1,2) OU (n,2,1) OU (n,2,2))
+ ET (n,1,3) OU (n,1,4) OU (n,2,3) OU (n,2,4))
+ ET (n,3,1) OU (n,3,2) OU (n,4,1) OU (n,4,2))
+ ET (n,3,3) OU (n,3,4) OU (n,4,3) OU (n,4,4))
+
+et comme on a jamais 2 chiffres sur une même case, on a donc pour chaque ligne l et chaque colonne c 
+(NON(1,l,c) OU NON(2,l,c)) ET (NON(1,l,c) OU NON(3,l,c)) ET (NON(1,l,c) OU NON(4,l,c))
+ET (NON(2,l,c) OU NON(3,l,c)) ET (NON(2,l,c) OU NON(4,l,c)) 
+ET (NON(3,l,c) OU NON(4,l,c))
+
+Une fois qu'on a modélisé toutes ces clauses, avec des boucles "for" à foison, il existe plein de "solveurs-SAT" 
+c'est à dire des programmes pour nous dire toutes les combinaisons de (n,l,c)/NON(n,l,c) qui peuvent être vrais en même temps, 
+Comme notre grille de Sudoku est bien faite, il n'y a qu'un seul (n,l,c) vrai par case (l,c) 
