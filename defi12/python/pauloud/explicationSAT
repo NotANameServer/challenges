@@ -19,7 +19,7 @@ Pour modéliser la grille suivante sous la forme d'un énoncé SAT
 On donne une clause de 1 littéral par chiffre déjà placé : 
 ((1,1,1)) ET ((3,1,3)) ET (3,2,2)) ET ((4,2,4))...ET ((3,4,1))
 
-En suite comme on ne peut pas dire de façon courte "chaque chiffre et présent une seule fois par ligne, colonne, carré" 
+Et enfin comme on ne peut pas dire de façon courte "chaque chiffre est présent une seule fois par ligne, colonne, carré" 
 on va se débrouiller autrement : 
 
 comme chaque chiffre et présent au moins une fois par ligne, on a pour chaque chiffre n de 1 à 4
