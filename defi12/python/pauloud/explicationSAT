@@ -1,3 +1,5 @@
+Sudoku 4x4 modélisé comme un problème SAT : 
+
 On écrit ici le triplet (n,l,c) pour dire "il y a un n sur la l-ième ligne et la c-ième colonne"
 Et on écrit son "opposé" NON(n,l,c) pour dire "il n'y a pas de n sur la l-ième ligne et la c-ième colonne"
 Ces deux triplets sont appelés des "litteraux" le premier est un littéral positif, le deuxième un litteral négatif.
