@@ -1,3 +1,4 @@
+
 Sudoku 4x4 modélisé comme un problème SAT : 
 
 On écrit ici le triplet (n,l,c) pour dire "il y a un n sur la l-ième ligne et la c-ième colonne"
@@ -46,5 +47,46 @@ ET (NON(2,l,c) OU NON(3,l,c)) ET (NON(2,l,c) OU NON(4,l,c))
 ET (NON(3,l,c) OU NON(4,l,c))
 
 Une fois qu'on a modélisé toutes ces clauses, avec des boucles "for" à foison, il existe plein de "solveurs-SAT" 
-c'est à dire des programmes pour nous dire toutes les combinaisons de (n,l,c)/NON(n,l,c) qui peuvent être vrais en même temps, 
-Comme notre grille de Sudoku est bien faite, il n'y a qu'un seul (n,l,c) vrai par case (l,c) 
+c'est à dire des programmes qui nous donnent toutes les combinaisons minimales
+ de (n,l,c)/NON(n,l,c) qui, en étant vrais en même temps, rendent forcément vrai l'énoncé
+ (c'est à dire que si la combinaison {a,NON(b)} est donnée solution, 
+ alors {a,NON(b),c} et {a,NON(b),NON(c)} rendent chacune vrai l'énoncé)
+Comme notre grille de Sudoku est bien faite, on a un seul (n,l,c) vrai par case l,c. 
+
+Le principe et le même avec des grilles de 9x9 ou plus.
+Les solveurs SAT sont généralement basés sur la méthode suivante dite DPLL, issue des travaux en 1962 par Davis,Putnam,Logemann et Loveland 
+
+
+DPLL(Combinaison,Clauses):
+    Si Clauses contient une clause vide : 
+        retourner {}
+    Pour toute clause de Clauses réduite à un seul litteral L:
+        ajouter L à Combinaison
+        supprimer dans Clauses toutes les clauses contenant L 
+        retirer dans chaque clause de Clauses, le litteral opposé à L
+    Pour tout litteral L dans Clauses, tel que son opposé n'apparait pas dans Clauses : 
+        ajouter L à Combinaison
+        supprimer dans Clauses toutes les clauses contenant L
+    Si clauses est vide :
+        retourner {Combinaison}
+    choisir un litteral positif L 
+    Comb1 <- UNION (Combinaison,{L})
+    Comb2 <- UNION (Combinaison,{NON L})
+    Cl1 <- Clauses moins les clauses contenant L 
+            et en supprimant NON L des autres clauses
+    CL2 <- Clauses moins les clauses contenant NON L 
+            et en supprimant L des autres clauses
+    retourner Union(DPLL(Comb1,Cl1),DPLL(Comb2,Cl2))
+    
+    En utilisant le module Glucose 3 du package pysat on constate un énorme gain de temps 
+    pour résoudre certaines grilles de Sudoku 9x9 par rapport à notre solveur maison, qui bruteforce la grille
+    Si certaines grilles sont résolues avec à peu près le même temps par les 2 solveurs (environ 3ms)
+    Notre solveur maison met près de 6 secondes pour certaines grilles, là où Glucose 3 plafonne à 100ms
+
+        
+        
+    
+
+
+
+
