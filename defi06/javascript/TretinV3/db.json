@@ -1,8 +1,0 @@
-{
-   "servers": [
-      "drlazor.be:6667",
-      "localhost:6667",
-      "irc.ircnet.com:6667"
-   ],
-   "channels": []
-}
